@@ -6,11 +6,13 @@ use App\Domain\Entity\Enum\UserTypeEnum;
 use App\Domain\Entity\Trait\AuthenticatableUser;
 use Eloquent;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
 use Override;
 
 /**
@@ -22,11 +24,13 @@ use Override;
  * @property Carbon|null $updated_at
  * @method static where(string $string, string $username)
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
+ * @property-read Collection<int, PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
  * @mixin Eloquent
  */
 class User extends Model implements Authenticatable
 {
-    use AuthenticatableUser, HasFactory, Notifiable;
+    use HasApiTokens, AuthenticatableUser, HasFactory, Notifiable;
 
     /**
      * The table associated with the model.
