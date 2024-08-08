@@ -1,7 +1,21 @@
 <?php
 
+use App\Presentation\Http\Controllers\AuthController;
+use App\Presentation\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::any('/', function () {
     return response()->json((object)[]);
 });
+
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'statelessLogin'])
+        ->name('api.auth.login');
+});
+
+Route::prefix('profile')
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::get('', [UserController::class, 'index'])
+            ->name('api.profile.index');
+    });
