@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Domain\Entity\AuctionItem;
 use App\Domain\Entity\Enum\UserTypeEnum;
 use App\Domain\Entity\User;
 use Illuminate\Database\Seeder;
@@ -16,6 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->defaultUser();
+        $this->seedAuctionItem();
     }
 
     private function defaultUser(): void
@@ -40,5 +42,10 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'type' => UserTypeEnum::regular,
         ])->create();
+    }
+
+    private function seedAuctionItem(): void
+    {
+        AuctionItem::factory(10)->create();
     }
 }
