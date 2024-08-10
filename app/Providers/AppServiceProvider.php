@@ -14,9 +14,11 @@ use App\Data\Repository\UserRepositoryImpl;
 use App\Domain\Repository\AuctionItemRepository;
 use App\Domain\Repository\BidRepository;
 use App\Domain\Repository\UserRepository;
+use App\Domain\UseCase\Abstract\PlaceAutoBidUseCase;
 use App\Domain\UseCase\Abstract\PlaceManualBidUseCase;
 use App\Domain\UseCase\Abstract\SetAuctionWinnerUseCase;
 use App\Domain\UseCase\Abstract\StatelessLoginUseCase;
+use App\Domain\UseCase\Concrete\PlaceAutoBidUseCaseImpl;
 use App\Domain\UseCase\Concrete\PlaceManualBidUseCaseImpl;
 use App\Domain\UseCase\Concrete\SetAuctionWinnerUseCaseImpl;
 use App\Domain\UseCase\Concrete\StatelessLoginUseCaseImpl;
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StatelessLoginUseCase::class, StatelessLoginUseCaseImpl::class);
         $this->app->bind(PlaceManualBidUseCase::class, PlaceManualBidUseCaseImpl::class);
         $this->app->bind(SetAuctionWinnerUseCase::class, SetAuctionWinnerUseCaseImpl::class);
+        $this->app->bind(PlaceAutoBidUseCase::class, PlaceAutoBidUseCaseImpl::class);
     }
 
     /**
