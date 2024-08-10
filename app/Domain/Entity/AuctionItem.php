@@ -29,6 +29,7 @@ use Override;
  * @property-read int|null $bids_count
  * @property-read Bid|null $current_price
  * @property-read Bid|null $winner
+ * @property-read UserAuctionAutobid|null $autobid
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
  * @mixin Eloquent
  */
@@ -72,6 +73,11 @@ class AuctionItem extends Model
     public function winner(): HasOne
     {
         return $this->hasOne(Bid::class);
+    }
+
+    public function autobids(): HasMany
+    {
+        return $this->hasMany(UserAuctionAutobid::class);
     }
 
     public function getCurrentPriceAttribute(): ?Bid

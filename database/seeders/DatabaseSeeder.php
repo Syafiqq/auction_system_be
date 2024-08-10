@@ -7,6 +7,7 @@ use App\Domain\Entity\AuctionItem;
 use App\Domain\Entity\Bid;
 use App\Domain\Entity\Enum\UserTypeEnum;
 use App\Domain\Entity\User;
+use App\Domain\Entity\UserAuctionAutobid;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
