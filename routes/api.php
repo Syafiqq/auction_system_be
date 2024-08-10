@@ -20,6 +20,8 @@ Route::prefix('profile')
     ->group(function () {
         Route::get('', [UserController::class, 'index'])
             ->name('api.profile.index');
+        Route::patch('autobid', [UserController::class, 'updateAutobid'])
+            ->name('api.profile.autobid');
     });
 
 Route::prefix('auction')
@@ -38,4 +40,7 @@ Route::prefix('auction')
 
         Route::post('{id}/bid', [BidController::class, 'place'])
             ->name('api.auction.bid.place');
+
+        Route::patch('{id}/autobid', [AuctionItemController::class, 'autobidUpdate'])
+            ->name('api.auction.autobid.update');
     });

@@ -12,6 +12,7 @@ use App\Presentation\Http\Requests\AuctionItemDeleteRequest;
 use App\Presentation\Http\Requests\AuctionItemDetailRequest;
 use App\Presentation\Http\Requests\AuctionItemListRequest;
 use App\Presentation\Http\Requests\AuctionItemUpdateRequest;
+use App\Presentation\Http\Requests\AuctionUpdateAutobidRequest;
 use App\Presentation\Http\Resources\AbstractPaginatorResourceCollection;
 use App\Presentation\Http\Resources\AuctionItemResource;
 use Exception;
@@ -72,8 +73,9 @@ class AuctionItemController
     public function show(AuctionItemDetailRequest $request)
     {
         try {
-            $response = $this->auctionItemRepository->findFromLocal(
+            $response = $this->auctionItemRepository->findForFromLocal(
                 $request->id,
+                $request->user()->id,
             );
             return AuctionItemResource::new($response)->toResponse($request);
         } catch (ModelNotFoundException) {
@@ -111,6 +113,22 @@ class AuctionItemController
         try {
             $response = $this->auctionItemRepository->deleteToLocal(
                 $request->id,
+            );
+            return AuctionItemResource::new($response)->toResponse($request);
+        } catch (ModelNotFoundException) {
+            return response()->json(null, Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (Exception|Throwable) {
+            return response()->json(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function autobidUpdate(AuctionUpdateAutobidRequest $request)
+    {
+        try {
+            $response = $this->auctionItemRepository->updateAutobidToLocal(
+                $request->id,
+                $request->user()->id,
+                $request->is_autobid,
             );
             return AuctionItemResource::new($response)->toResponse($request);
         } catch (ModelNotFoundException) {

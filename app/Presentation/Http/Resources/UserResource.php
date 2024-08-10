@@ -30,6 +30,8 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'username' => $this->username,
             'role' => $this->type,
+            'autobid_capacity' => $this->autobid_capacity,
+            'autobid_percentage_warning' => $this->autobid_percentage_warning,
             'access_token' => $this->accessToken
         ];
     }
