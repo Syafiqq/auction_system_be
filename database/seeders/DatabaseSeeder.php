@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Domain\Entity\AuctionItem;
+use App\Domain\Entity\Bid;
 use App\Domain\Entity\Enum\UserTypeEnum;
 use App\Domain\Entity\User;
 use Illuminate\Database\Seeder;

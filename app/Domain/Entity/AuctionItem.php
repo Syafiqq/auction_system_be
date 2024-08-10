@@ -21,6 +21,8 @@ use Override;
  * @property Carbon|null $updated_at
  * @property-read Collection<int, AuctionItemImage> $images
  * @property-read int|null $images_count
+ * @property-read Collection<int, Bid> $bids
+ * @property-read int|null $bids_count
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
  * @mixin Eloquent
  */
@@ -50,6 +52,11 @@ class AuctionItem extends Model
     public function images(): HasMany
     {
         return $this->hasMany(AuctionItemImage::class);
+    }
+
+    public function bids(): HasMany
+    {
+        return $this->hasMany(Bid::class);
     }
 
     /**

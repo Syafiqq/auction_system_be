@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,6 +25,8 @@ use Override;
  * @property Carbon|null $updated_at
  * @method static where(string $string, string $username)
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
+ * @property-read Collection<int, Bid> $bids
+ * @property-read int|null $bids_count
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @mixin Eloquent
@@ -58,6 +61,11 @@ class User extends Model implements Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function bids(): HasMany
+    {
+        return $this->hasMany(Bid::class);
+    }
 
     /**
      * Get the attributes that should be cast.
