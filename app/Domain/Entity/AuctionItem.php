@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Override;
@@ -18,6 +19,8 @@ use Override;
  * @property string|null $description
  * @property int $starting_price
  * @property Carbon $end_time
+ * @property bool $has_winner
+ * @property int|null $winner_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, AuctionItemImage> $images
@@ -25,6 +28,7 @@ use Override;
  * @property-read Collection<int, Bid> $bids
  * @property-read int|null $bids_count
  * @property-read Bid|null $current_price
+ * @property-read Bid|null $winner
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
  * @mixin Eloquent
  */
@@ -63,6 +67,11 @@ class AuctionItem extends Model
     public function images(): HasMany
     {
         return $this->hasMany(AuctionItemImage::class);
+    }
+
+    public function winner(): HasOne
+    {
+        return $this->hasOne(Bid::class);
     }
 
     public function getCurrentPriceAttribute(): ?Bid
