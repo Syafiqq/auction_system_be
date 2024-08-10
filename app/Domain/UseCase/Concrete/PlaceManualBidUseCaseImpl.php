@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Domain\UseCase\Concrete;
+
+use App\Domain\Entity\Bid;
+use App\Domain\Entity\Dto\BidRequestDto;
+use App\Domain\Entity\Enum\BidTypeEnum;
+use App\Domain\Repository\AuctionItemRepository;
+use App\Domain\Repository\BidRepository;
+use App\Domain\UseCase\Abstract\PlaceManualBidUseCase;
+use App\Domain\UseCase\Trait\PlaceBidPreparation;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Override;
+
+class PlaceManualBidUseCaseImpl implements PlaceManualBidUseCase
+{
+    use PlaceBidPreparation;
+
+    public function __construct(
+        protected BidRepository         $bidRepository,
+        protected AuctionItemRepository $auctionItemRepository,
+    )
+    {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function execute(BidRequestDto $data): Bid
+    {
+        $auction = $this->auctionItemRepository->findFromLocal($data->auctionItem);
+        /** @var ?Bid $bid */
+        $bid = null;
+        try {
+            $bid = $this->bidRepository->findNewestFromLocal($data->auctionItem);
+        } catch (ModelNotFoundException) {
+        }
+
+        $this->validate($auction, $bid, $data);
+
+        return $this->bidRepository->insertToLocal($data, BidTypeEnum::manual);
+    }
+}
