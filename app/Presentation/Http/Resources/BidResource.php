@@ -2,12 +2,12 @@
 
 namespace App\Presentation\Http\Resources;
 
-use App\Domain\Entity\AuctionItem;
+use App\Domain\Entity\Bid;
 use App\Presentation\Http\Trait\ResourceCreation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuctionItemResource extends JsonResource
+class BidResource extends JsonResource
 {
     use ResourceCreation;
 
@@ -16,7 +16,7 @@ class AuctionItemResource extends JsonResource
      *
      * @var string
      */
-    public string $collects = AuctionItem::class;
+    public string $collects = Bid::class;
 
     /**
      * Transform the resource into an array.
@@ -27,12 +27,8 @@ class AuctionItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'starting_price' => $this->starting_price,
-            'end_time' => $this->end_time,
-            'images' => AuctionItemImageResource::collection($this->images),
-            'current_price' => BidResource::new($this->current_price),
+            'amount' => $this->amount,
+            'bid_at' => $this->bid_at,
         ];
     }
 }

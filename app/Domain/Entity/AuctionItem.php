@@ -6,6 +6,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -23,6 +24,7 @@ use Override;
  * @property-read int|null $images_count
  * @property-read Collection<int, Bid> $bids
  * @property-read int|null $bids_count
+ * @property-read Bid|null $current_price
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
  * @mixin Eloquent
  */
@@ -49,9 +51,32 @@ class AuctionItem extends Model
         'end_time',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'current_price',
+    ];
+
     public function images(): HasMany
     {
         return $this->hasMany(AuctionItemImage::class);
+    }
+
+    public function getCurrentPriceAttribute(): ?Bid
+    {
+        try {
+            /** @var Bid $bid */
+            $bid = $this->bids()
+                ->orderByDesc('amount')
+                ->orderByDesc('bid_at')
+                ->firstOrFail();
+            return $bid;
+        } catch (ModelNotFoundException) {
+            return null;
+        }
     }
 
     public function bids(): HasMany
