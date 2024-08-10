@@ -3,11 +3,13 @@
 namespace App\Domain\Repository;
 
 use App\Domain\Entity\AuctionItem;
+use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Collection;
 use Throwable;
 
 interface AuctionItemRepository
@@ -52,4 +54,19 @@ interface AuctionItemRepository
      * @throws Throwable
      */
     public function deleteToLocal(int $at): AuctionItem;
+
+    /**
+     * @return mixed
+     */
+    public function findUndecidedWinnerFromLocal(): Collection;
+
+    /**
+     * @param AuctionItem $item
+     * @param ?Bid $bid
+     * @return AuctionItem
+     */
+    public function setWinnerToLocal(
+        AuctionItem $item,
+        ?Bid        $bid
+    ): AuctionItem;
 }

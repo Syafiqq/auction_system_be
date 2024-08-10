@@ -4,12 +4,14 @@ namespace App\Data\DataSource\Local\Abstract;
 
 
 use App\Domain\Entity\AuctionItem;
+use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Collection;
 use Throwable;
 
 interface AuctionItemLocalDataSource
@@ -62,4 +64,19 @@ interface AuctionItemLocalDataSource
     public function saveImages(
         array $data,
     ): array;
+
+    /**
+     * @return Collection
+     */
+    public function findUndecidedWinners(): Collection;
+
+    /**
+     * @param AuctionItem $item
+     * @param ?Bid $bid
+     * @return AuctionItem
+     */
+    public function setWinner(
+        AuctionItem $item,
+        ?Bid        $bid
+    ): AuctionItem;
 }

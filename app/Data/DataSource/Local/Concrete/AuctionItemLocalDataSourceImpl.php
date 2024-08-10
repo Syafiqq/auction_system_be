@@ -5,10 +5,12 @@ namespace App\Data\DataSource\Local\Concrete;
 use App\Data\DataSource\Local\Abstract\AuctionItemLocalDataSource;
 use App\Domain\Entity\AuctionItem;
 use App\Domain\Entity\AuctionItemImage;
+use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Collection;
 use Override;
 use Ramsey\Uuid\Uuid;
 
@@ -143,5 +145,33 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
             $imageNames[] = $imageName;
         }
         return $imageNames;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findUndecidedWinners(): Collection
+    {
+        return AuctionItem::query()
+            ->where('has_winner', false)
+            ->where('end_time', '<', now())
+            ->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function setWinner(
+        AuctionItem $item,
+        ?Bid        $bid
+    ): AuctionItem
+    {
+        $item->has_winner = true;
+        $item->winner_id = $bid?->id;
+        $item->save();
+
+        return $item->load('images');
     }
 }

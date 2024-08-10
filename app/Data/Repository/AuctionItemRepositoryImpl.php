@@ -4,11 +4,13 @@ namespace App\Data\Repository;
 
 use App\Data\DataSource\Local\Abstract\AuctionItemLocalDataSource;
 use App\Domain\Entity\AuctionItem;
+use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use App\Domain\Repository\AuctionItemRepository;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Collection;
 use Override;
 
 class AuctionItemRepositoryImpl implements AuctionItemRepository
@@ -70,5 +72,26 @@ class AuctionItemRepositoryImpl implements AuctionItemRepository
     public function deleteToLocal(int $at): AuctionItem
     {
         return $this->localDataSource->delete($at);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findUndecidedWinnerFromLocal(): Collection
+    {
+        return $this->localDataSource->findUndecidedWinners();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function setWinnerToLocal(
+        AuctionItem $item,
+        ?Bid        $bid
+    ): AuctionItem
+    {
+        return $this->localDataSource->setWinner($item, $bid);
     }
 }
