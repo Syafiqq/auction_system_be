@@ -9,6 +9,7 @@ use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
+use App\Domain\Entity\UserAuctionAutobid;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 use Override;
@@ -84,6 +85,19 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
     public function find(int $at): AuctionItem
     {
         return AuctionItem::with('images')->findOrFail($at);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findFor(int $at, int $for): AuctionItem
+    {
+        return AuctionItem::with('images', 'autobids')
+            ->with(['autobids' => function ($query) use ($for) {
+                $query->where('user_id', $for);
+            }])
+            ->findOrFail($at);
     }
 
     /**
@@ -173,5 +187,27 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
         $item->save();
 
         return $item->load('images');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function updateAutobid(int $at, int $for, bool $to): AuctionItem
+    {
+        /** @var AuctionItem $builder */
+        $builder = AuctionItem::findOrFail($at);
+
+        /** @var UserAuctionAutobid $autobid */
+        $autobid = $builder
+            ->autobids()
+            ->where('user_id', $for)
+            ->firstOrCreate(['user_id' => $for]);
+        $autobid->is_autobid = $to;
+        $autobid->save();
+
+        return $builder->load(['autobids' => function ($query) use ($for) {
+            $query->where('user_id', $for);
+        }]);
     }
 }

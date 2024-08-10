@@ -42,4 +42,13 @@ class UserRepositoryImpl implements UserRepository
     {
         return $this->localDataSource->find($at);
     }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function updateAutobidToLocal(User $at, int $amount, int $percentage): User
+    {
+        return $this->localDataSource->updateAutobid($at, $amount, $percentage);
+    }
 }

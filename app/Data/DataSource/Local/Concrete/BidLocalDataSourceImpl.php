@@ -6,6 +6,8 @@ use App\Data\DataSource\Local\Abstract\BidLocalDataSource;
 use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\BidRequestDto;
 use App\Domain\Entity\Enum\BidTypeEnum;
+use App\Domain\Entity\User;
+use Illuminate\Support\Collection;
 use Override;
 
 class BidLocalDataSourceImpl implements BidLocalDataSource
@@ -40,5 +42,33 @@ class BidLocalDataSourceImpl implements BidLocalDataSource
             ->orderByDesc('amount')
             ->orderByDesc('bid_at')
             ->firstOrFail();
+    }
+
+    #[Override]
+    public function getAutobidUsage(User $for, int $except): int
+    {
+        /** @var array<string> $auctionIds */
+        $auctionIds = $for
+            ->autobids()
+            ->where('is_autobid', true)
+            ->get()
+            ->pluck('auction_item_id')
+            ->toArray();
+        $auctionIds = array_diff($auctionIds, [$except]);
+
+        /** @var Collection $largestBids */
+        $largestBids = Bid::whereIn('auction_item_id', $auctionIds)
+            ->selectRaw('auction_item_id, MAX(amount) as amount, user_id')
+            ->groupBy('auction_item_id')
+            ->get();
+
+        $sum = 0;
+        foreach ($largestBids as $largestBid) {
+            if ($largestBid->user_id === $for->id) {
+                $sum += $largestBid->amount;
+            }
+        }
+
+        return $sum;
     }
 }

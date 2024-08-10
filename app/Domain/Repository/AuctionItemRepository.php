@@ -40,6 +40,14 @@ interface AuctionItemRepository
     public function findFromLocal(int $at): AuctionItem;
 
     /**
+     * @param int $at
+     * @param int $for
+     * @return AuctionItem
+     * @throws ModelNotFoundException<AuctionItem>
+     */
+    public function findForFromLocal(int $at, int $for): AuctionItem;
+
+    /**
      * @param AuctionItemUpdateRequestDto $data
      * @param int $at
      * @return AuctionItem
@@ -69,4 +77,13 @@ interface AuctionItemRepository
         AuctionItem $item,
         ?Bid        $bid
     ): AuctionItem;
+
+    /**
+     * @param int $at
+     * @param int $for
+     * @param bool $to
+     * @return AuctionItem
+     * @throws ModelNotFoundException
+     */
+    public function updateAutobidToLocal(int $at, int $for, bool $to): AuctionItem;
 }

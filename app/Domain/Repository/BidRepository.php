@@ -6,6 +6,7 @@ use App\Common\Exceptions\Bid\NewerBidPresentException;
 use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\BidRequestDto;
 use App\Domain\Entity\Enum\BidTypeEnum;
+use App\Domain\Entity\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 interface BidRepository
@@ -24,4 +25,6 @@ interface BidRepository
      * @throws ModelNotFoundException
      */
     public function findNewestFromLocal(int $at): Bid;
+
+    public function getAutobidUsageFromLocal(User $for, int $except): int;
 }

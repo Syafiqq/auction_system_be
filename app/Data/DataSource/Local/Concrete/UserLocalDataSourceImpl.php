@@ -41,4 +41,16 @@ class UserLocalDataSourceImpl implements UserLocalDataSource
     {
         return User::findOrFail($at);
     }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function updateAutobid(User $at, int $amount, int $percentage): User
+    {
+        $at->autobid_capacity = $amount;
+        $at->autobid_percentage_warning = $percentage;
+        $at->save();
+        return $at;
+    }
 }

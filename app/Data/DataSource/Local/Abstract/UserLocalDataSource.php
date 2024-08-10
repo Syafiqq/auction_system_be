@@ -26,4 +26,13 @@ interface UserLocalDataSource
      * @throws ModelNotFoundException<User>
      */
     public function find(int $at): User;
+
+    /**
+     * @param User $at
+     * @param int $amount
+     * @param int $percentage
+     * @return User
+     * @throws ModelNotFoundException
+     */
+    public function updateAutobid(User $at, int $amount, int $percentage): User;
 }

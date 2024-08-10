@@ -26,4 +26,13 @@ interface UserRepository
      * @throws ModelNotFoundException<User>
      */
     public function findFromLocal(int $at): User;
+
+    /**
+     * @param User $at
+     * @param int $amount
+     * @param int $percentage
+     * @return User
+     * @throws ModelNotFoundException<User>
+     */
+    public function updateAutobidToLocal(User $at, int $amount, int $percentage): User;
 }

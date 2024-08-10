@@ -42,6 +42,14 @@ interface AuctionItemLocalDataSource
     public function find(int $at): AuctionItem;
 
     /**
+     * @param int $at
+     * @param int $for
+     * @return AuctionItem
+     * @throws ModelNotFoundException<AuctionItem>
+     */
+    public function findFor(int $at, int $for): AuctionItem;
+
+    /**
      * @param AuctionItemUpdateRequestDto $data
      * @param int $at
      * @return AuctionItem
@@ -79,4 +87,13 @@ interface AuctionItemLocalDataSource
         AuctionItem $item,
         ?Bid        $bid
     ): AuctionItem;
+
+    /**
+     * @param int $at
+     * @param int $for
+     * @param bool $to
+     * @return AuctionItem
+     * @throws ModelNotFoundException
+     */
+    public function updateAutobid(int $at, int $for, bool $to): AuctionItem;
 }

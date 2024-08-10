@@ -58,6 +58,15 @@ class AuctionItemRepositoryImpl implements AuctionItemRepository
      * @inheritDoc
      */
     #[Override]
+    public function findForFromLocal(int $at, int $for): AuctionItem
+    {
+        return $this->localDataSource->findFor($at, $for);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
     public function updateFromLocal(AuctionItemUpdateRequestDto $data, int $at): AuctionItem
     {
         $paths = $this->localDataSource->saveImages($data->images);
@@ -93,5 +102,14 @@ class AuctionItemRepositoryImpl implements AuctionItemRepository
     ): AuctionItem
     {
         return $this->localDataSource->setWinner($item, $bid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function updateAutobidToLocal(int $at, int $for, bool $to): AuctionItem
+    {
+        return $this->localDataSource->updateAutobid($at, $for, $to);
     }
 }
