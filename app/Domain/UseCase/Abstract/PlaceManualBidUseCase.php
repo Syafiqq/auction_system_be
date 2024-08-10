@@ -2,6 +2,7 @@
 
 namespace App\Domain\UseCase\Abstract;
 
+use App\Common\Exceptions\Bid\AuctionEndedEarlyException;
 use App\Common\Exceptions\Bid\AuctionEndedException;
 use App\Common\Exceptions\Bid\LessBidPlacedException;
 use App\Common\Exceptions\Bid\NewerBidPresentException;
@@ -16,6 +17,7 @@ interface PlaceManualBidUseCase
      * @throws NewerBidPresentException
      * @throws LessBidPlacedException
      * @throws AuctionEndedException
+     * @throws AuctionEndedEarlyException
      */
     public function execute(BidRequestDto $data): Bid;
 }

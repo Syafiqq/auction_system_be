@@ -2,6 +2,7 @@
 
 namespace App\Domain\UseCase\Trait;
 
+use App\Common\Exceptions\Bid\AuctionEndedEarlyException;
 use App\Common\Exceptions\Bid\AuctionEndedException;
 use App\Common\Exceptions\Bid\LessBidPlacedException;
 use App\Common\Exceptions\Bid\NewerBidPresentException;
@@ -19,6 +20,7 @@ trait PlaceBidPreparation
      * @throws AuctionEndedException
      * @throws LessBidPlacedException
      * @throws NewerBidPresentException
+     * @throws AuctionEndedEarlyException
      */
     public function validate(AuctionItem $auction, ?Bid $highestBid, BidRequestDto $data): void
     {
@@ -35,6 +37,9 @@ trait PlaceBidPreparation
         }
         if ($auction->end_time < now()) {
             throw new AuctionEndedException($auction->end_time);
+        }
+        if ($auction->has_winner) {
+            throw new AuctionEndedEarlyException();
         }
     }
 }

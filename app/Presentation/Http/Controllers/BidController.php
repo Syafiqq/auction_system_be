@@ -3,6 +3,7 @@
 namespace App\Presentation\Http\Controllers;
 
 
+use App\Common\Exceptions\Bid\AuctionEndedEarlyException;
 use App\Common\Exceptions\Bid\AuctionEndedException;
 use App\Common\Exceptions\Bid\LessBidPlacedException;
 use App\Common\Exceptions\Bid\NewerBidPresentException;
@@ -45,6 +46,10 @@ class BidController
         } catch (AuctionEndedException $exception) {
             return response()->json([
                 'message' => "Auction has ended at {$exception->date->format('Y-m-d H:i:s')}"
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (AuctionEndedEarlyException) {
+            return response()->json([
+                'message' => "Auction has ended early, cannot place bid anymore"
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (Exception) {
             return response()->json(null, Response::HTTP_INTERNAL_SERVER_ERROR);
