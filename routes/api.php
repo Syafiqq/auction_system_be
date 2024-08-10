@@ -2,6 +2,7 @@
 
 use App\Presentation\Http\Controllers\AuctionItemController;
 use App\Presentation\Http\Controllers\AuthController;
+use App\Presentation\Http\Controllers\BidController;
 use App\Presentation\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,7 @@ Route::prefix('auction')
             ->name('api.auction.update');
         Route::delete('{id}', [AuctionItemController::class, 'delete'])
             ->name('api.auction.delete');
+
+        Route::post('{id}/bid', [BidController::class, 'place'])
+            ->name('api.auction.bid.place');
     });
