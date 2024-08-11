@@ -86,4 +86,11 @@ interface AuctionItemRepository
      * @throws ModelNotFoundException
      */
     public function updateAutobidToLocal(int $at, int $for, bool $to): AuctionItem;
+
+    /**
+     * @param int $at
+     * @param int|null $except
+     * @return array<int>
+     */
+    public function findAllAutobidUserFromLocal(int $at, ?int $except): array;
 }

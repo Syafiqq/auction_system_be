@@ -210,4 +210,23 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
             $query->where('user_id', $for);
         }]);
     }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findAllAutobidUser(int $at, ?int $except): array
+    {
+        $query = UserAuctionAutobid::query()
+            ->where('auction_item_id', $at)
+            ->where('is_autobid', true);
+
+        if ($except !== null) {
+            $query = $query->
+            where('user_id', '!=', $except);
+        }
+
+        return $query->pluck('user_id')
+            ->toArray();
+    }
 }

@@ -96,4 +96,11 @@ interface AuctionItemLocalDataSource
      * @throws ModelNotFoundException
      */
     public function updateAutobid(int $at, int $for, bool $to): AuctionItem;
+
+    /**
+     * @param int $at
+     * @param int|null $except
+     * @return array<int>
+     */
+    public function findAllAutobidUser(int $at, ?int $except): array;
 }

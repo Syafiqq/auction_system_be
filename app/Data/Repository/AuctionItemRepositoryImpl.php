@@ -112,4 +112,13 @@ class AuctionItemRepositoryImpl implements AuctionItemRepository
     {
         return $this->localDataSource->updateAutobid($at, $for, $to);
     }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findAllAutobidUserFromLocal(int $at, ?int $except): array
+    {
+        return $this->localDataSource->findAllAutobidUser($at, $except);
+    }
 }
