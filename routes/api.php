@@ -3,6 +3,7 @@
 use App\Presentation\Http\Controllers\AuctionItemController;
 use App\Presentation\Http\Controllers\AuthController;
 use App\Presentation\Http\Controllers\BidController;
+use App\Presentation\Http\Controllers\InAppNotificationController;
 use App\Presentation\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,4 +44,11 @@ Route::prefix('auction')
 
         Route::patch('{id}/autobid', [AuctionItemController::class, 'autobidUpdate'])
             ->name('api.auction.autobid.update');
+    });
+
+Route::prefix('notification')
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::get('', [InAppNotificationController::class, 'index'])
+            ->name('api.in_app_notification.index');
     });
