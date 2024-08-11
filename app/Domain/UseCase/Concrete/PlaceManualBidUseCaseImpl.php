@@ -9,6 +9,7 @@ use App\Domain\Repository\AuctionItemRepository;
 use App\Domain\Repository\BidRepository;
 use App\Domain\UseCase\Abstract\PlaceManualBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
+use App\Presentation\Jobs\AutobidPreparationJob;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Override;
 
@@ -38,6 +39,9 @@ class PlaceManualBidUseCaseImpl implements PlaceManualBidUseCase
         }
 
         $this->validate($auction, $bid, $data);
+
+        AutobidPreparationJob::dispatch($bid->id ?? 1, $auction->id, $data->user->id)
+            ->onQueue('autobid_preparation');
 
         return $this->bidRepository->insertToLocal($data, BidTypeEnum::manual);
     }
