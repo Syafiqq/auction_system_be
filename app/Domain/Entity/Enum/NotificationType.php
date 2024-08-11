@@ -2,8 +2,12 @@
 
 namespace App\Domain\Entity\Enum;
 
+use App\Domain\Entity\Dto\InAppNotificationCreateRequestBuilder;
+
 enum NotificationType: string
 {
+    use InAppNotificationCreateRequestBuilder;
+
     case insufficientAutoBidBalance = 'insufficient_auto_bid_balance';
     case bidWinner = 'bid_winner';
     case autobidUsageWarning = 'autobid_usage_warning';

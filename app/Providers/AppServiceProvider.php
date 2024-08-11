@@ -4,15 +4,19 @@ namespace App\Providers;
 
 use App\Data\DataSource\Local\Abstract\AuctionItemLocalDataSource;
 use App\Data\DataSource\Local\Abstract\BidLocalDataSource;
+use App\Data\DataSource\Local\Abstract\InAppNotificationLocalDataSource;
 use App\Data\DataSource\Local\Abstract\UserLocalDataSource;
 use App\Data\DataSource\Local\Concrete\AuctionItemLocalDataSourceImpl;
 use App\Data\DataSource\Local\Concrete\BidLocalDataSourceImpl;
+use App\Data\DataSource\Local\Concrete\InAppNotificationLocalDataSourceImpl;
 use App\Data\DataSource\Local\Concrete\UserLocalDataSourceImpl;
 use App\Data\Repository\AuctionItemRepositoryImpl;
 use App\Data\Repository\BidRepositoryImpl;
+use App\Data\Repository\InAppNotificationRepositoryImpl;
 use App\Data\Repository\UserRepositoryImpl;
 use App\Domain\Repository\AuctionItemRepository;
 use App\Domain\Repository\BidRepository;
+use App\Domain\Repository\InAppNotificationRepository;
 use App\Domain\Repository\UserRepository;
 use App\Domain\UseCase\Abstract\PlaceAutoBidUseCase;
 use App\Domain\UseCase\Abstract\PlaceManualBidUseCase;
@@ -37,10 +41,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UserLocalDataSource::class, UserLocalDataSourceImpl::class);
         $this->app->singleton(AuctionItemLocalDataSource::class, AuctionItemLocalDataSourceImpl::class);
         $this->app->singleton(BidLocalDataSource::class, BidLocalDataSourceImpl::class);
+        $this->app->singleton(InAppNotificationLocalDataSource::class, InAppNotificationLocalDataSourceImpl::class);
 
         $this->app->singleton(UserRepository::class, UserRepositoryImpl::class);
         $this->app->singleton(AuctionItemRepository::class, AuctionItemRepositoryImpl::class);
         $this->app->singleton(BidRepository::class, BidRepositoryImpl::class);
+        $this->app->singleton(InAppNotificationRepository::class, InAppNotificationRepositoryImpl::class);
 
         $this->app->bind(StatelessLoginUseCase::class, StatelessLoginUseCaseImpl::class);
         $this->app->bind(PlaceManualBidUseCase::class, PlaceManualBidUseCaseImpl::class);
