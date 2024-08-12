@@ -141,9 +141,9 @@ php artisan schedule:work
 php artisan queue:work
 ```
 
-11. Export the postman collection and environment file from the `postman` to test the API
+12. Export the postman collection and environment file from the `postman` to test the API
 
-##### 2.1.2. Backend Laravel
+##### 2.1.2. Frontend NextJs
 
 #### TBA
 
