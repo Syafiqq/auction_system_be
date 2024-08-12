@@ -1,66 +1,182 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AUCTION SYSTEM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### 1. To-Do List for the Web Auction Application
 
-## About Laravel
+#### 1.1. Home Page
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [ ] Implement user login and navigation to the home page upon successful login.
+    - [X] Api
+- [ ] Display a paginated list of auction items (10 items per page).
+    - [X] Api
+- [ ] Implement a search box to filter items by Name and Description fields.
+    - [X] Api
+- [ ] Add sorting functionality for the Price column.
+    - [X] Api
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### 1.2. Item Details Page
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [ ] Create a details page for each auction item.
+    - [X] Api
+- [ ] Add a countdown timer to show the remaining time before bidding closes.
+- [ ] Implement a bidding system with a minimum bid increment (e.g., $1 more than the last bid).
+    - [X] Api
+- [ ] Allow users to submit bids and ensure multiple bids by the same user are allowed if their bid is not the highest.
+    - [X] Api
+- [ ] Implement the auto-bidding feature:
+    - [ ] Add a checkbox to activate auto-bidding.
+    - [ ] Automatically outbid other users by $1 when auto-bidding is activated.
 
-## Learning Laravel
+#### 1.3. Auto-Bidding Configuration
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- [ ] Create a separate page for configuring auto-bidding parameters.
+    - [X] Api
+- [ ] Allow users to set the maximum bid amount for auto-bidding.
+    - [X] Api
+- [ ] Ensure the maximum amount is shared across all items with auto-bidding enabled.
+    - [X] Api
+- [ ] Implement bid alert notifications based on a user-defined percentage of the maximum bid amount.
+    - [X] Api
+- [ ] Stop auto-bidding and notify the user when funds are insufficient.
+    - [X] Api
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### 1.4. Administrator Dashboard Page
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- [ ] Implement a page where administrators can:
+    - [ ] Add new auction items.
+        - [X] Api
+    - [ ] View details of a single item.
+        - [X] Api
+    - [ ] Modify the fields of an item.
+        - [X] Api
+    - [ ] Remove an item.
+        - [X] Api
+- [ ] Ensure regular users can only view the list and details of auction items.
+    - [X] Api
 
-## Laravel Sponsors
+#### 1.5. Additional Tasks
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- [ ] Implement user authentication and role management (admin vs. regular user).
+    - [X] Api
+- [ ] Design the user interface with good usability principles.
+- [ ] Handle concurrency issues, especially with the auto-bidding feature.
+    - [X] Api
+- [ ] Implement notifications for bid alerts and auto-bidding status.
+    - [X] Api
+- [ ] Ensure the application is secure and handles edge cases (e.g., simultaneous bids).
+    - [X] Api
 
-### Premium Partners
+#### 1.6. Testing
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- [ ] Perform unit tests for each feature.
+- [ ] Conduct integration testing for the entire application.
+- [ ] Ensure usability testing to verify a good user experience.
+- [ ] Test for concurrency issues and resolve any conflicts.
 
-## Contributing
+### 2. Deployment
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 2.1. Installation
 
-## Code of Conduct
+##### 2.1.1. Backend Laravel
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Clone the repository
 
-## Security Vulnerabilities
+```bash
+git clone https://github.com/Syafiqq/auction_system_be.git
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. Change directory
 
-## License
+```bash
+cd auction_system_be
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. Install dependencies
+
+```bash
+composer install
+```
+
+4. Create a new `.env` file
+
+```bash
+cp .env.example .env
+```
+
+5. Generate a new application key
+
+```bash
+php artisan key:generate
+```
+
+6. Set up the database connection in the `.env` file
+7. Run the database migrations
+
+```bash
+php artisan migrate
+```
+
+8. Start the Laravel development server
+
+```bash
+php artisan serve
+```
+
+9. The backend API should now be accessible at `http://localhost:8000`
+
+10. a. Setup cron job for the scheduler [Reference](https://laravel.com/docs/11.x/scheduling#running-the-scheduler)
+
+```bash
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+10. b. run the scheduler for placing the winner at 12PM
+
+```bash
+php artisan schedule:work
+```
+
+11. Run job for autobid
+
+```bash
+php artisan queue:work
+```
+
+11. Export the postman collection and environment file from the `postman` to test the API
+
+##### 2.1.2. Backend Laravel
+
+#### TBA
+
+### 3. Areas for Improvement:
+
+- Notification Handling: The current notification system is closely integrated with the main workflow, which can impact
+  efficiency. To enhance performance, consider delegating notifications, such as those for "auction ended" events, to a
+  separate worker or service. This would allow notifications to be processed independently of the primary workflow,
+  improving overall system responsiveness.
+- Bidding Process Development: Further development is needed for both manual and automated bidding processes.
+  Establishing clear strategies for managing different types of bids will help ensure a seamless and intuitive user
+  experience.
+- Bidding Locking Mechanism: The system currently lacks a robust locking mechanism for the bidding process. Implementing
+  a locking system, potentially utilizing a FIFO approach and Redis, could prevent conflicts and maintain the integrity
+  of bids.
+- Transaction Management: Some application processes are not fully transactional, which poses a risk of incomplete or
+  inconsistent data if an error occurs. Ensuring that all critical processes are handled transactionally would mitigate
+  this risk and improve data integrity.
+
+### 4. Limitations:
+
+- Autobid Maximum Amount: The autobid's maximum amount is only applicable to subsequent bids and is not adjusted after a
+  successful bid. This may lead to user confusion or unintended bidding behavior, and should be addressed to align with
+  user expectations.
+- Autobid Value Reduction: The system currently allows the reduction of an autobid value even when the autobid is active
+  and has potential to win. This could compromise the integrity of the bidding process and requires reevaluation.
+- Notification Workflow: The notification workflow is currently integrated within the main process flow, introducing
+  unnecessary overhead. Decoupling the notification process from the main workflow would enhance overall system
+  performance.
+- Unit Testing: There is limited time available for unit testing, which could affect the reliability of the system.
+  Allocating time for comprehensive unit testing is essential for ensuring code quality and system stability.
+- Autobid and Manual Bid Interaction: The autobid system uses a round-robin approach, which does not utilize a queue.
+  This decision is based on the need to remove ongoing autobid processes when a manual bid is placed, and to create a
+  new autobid process. This approach may need further evaluation to ensure optimal functionality.
+- Image Upload Constraints: Currently, the system does not impose constraints on image upload sizes. Implementing size
+  limitations would help manage storage and performance, ensuring that uploaded images are appropriately sized.
