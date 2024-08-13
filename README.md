@@ -115,33 +115,39 @@ php artisan key:generate
 php artisan migrate
 ```
 
-8. Start the Laravel development server
+8. Make symlink of storage
+
+```bash
+php artisan storage:link
+```
+
+9. Start the Laravel development server
 
 ```bash
 php artisan serve
 ```
 
-9. The backend API should now be accessible at `http://localhost:8000`
+10. The backend API should now be accessible at `http://localhost:8000`
 
-10. a. Setup cron job for the scheduler [Reference](https://laravel.com/docs/11.x/scheduling#running-the-scheduler)
+11. a. Setup cron job for the scheduler [Reference](https://laravel.com/docs/11.x/scheduling#running-the-scheduler)
 
 ```bash
 * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-10. b. run the scheduler for placing the winner at 12PM
+11. b. run the scheduler for placing the winner at 12PM
 
 ```bash
 php artisan schedule:work
 ```
 
-11. Run job for autobid
+12. Run job for autobid
 
 ```bash
 php artisan queue:work
 ```
 
-12. Export the postman collection and environment file from the `postman` to test the API
+13. Export the postman collection and environment file from the `postman` to test the API
 
 ##### 2.1.2. Frontend NextJs
 
