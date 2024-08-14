@@ -33,7 +33,9 @@ class AuctionItemResource extends JsonResource
             'end_time' => $this->end_time,
             'images' => AuctionItemImageResource::collection($this->images),
             'current_price' => BidResource::new($this->current_price),
-            'autobid' => boolval($this->autobids->first->is_autobid)
+            'autobid' => boolval($this->autobids->first->is_autobid),
+            'has_winner' => $this->has_winner,
+            'winner_id' => $this->winner_id,
         ];
     }
 }
