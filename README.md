@@ -4,65 +4,65 @@
 
 #### 1.1. Home Page
 
-- [ ] Implement user login and navigation to the home page upon successful login.
+- [X] Implement user login and navigation to the home page upon successful login.
     - [X] Api
-- [ ] Display a paginated list of auction items (10 items per page).
+- [X] Display a paginated list of auction items (10 items per page).
     - [X] Api
-- [ ] Implement a search box to filter items by Name and Description fields.
+- [X] Implement a search box to filter items by Name and Description fields.
     - [X] Api
-- [ ] Add sorting functionality for the Price column.
+- [X] Add sorting functionality for the Price column.
     - [X] Api
 
 #### 1.2. Item Details Page
 
-- [ ] Create a details page for each auction item.
+- [X] Create a details page for each auction item.
     - [X] Api
-- [ ] Add a countdown timer to show the remaining time before bidding closes.
-- [ ] Implement a bidding system with a minimum bid increment (e.g., $1 more than the last bid).
+- [X] Add a countdown timer to show the remaining time before bidding closes.
+- [X] Implement a bidding system with a minimum bid increment (e.g., $1 more than the last bid).
     - [X] Api
-- [ ] Allow users to submit bids and ensure multiple bids by the same user are allowed if their bid is not the highest.
+- [X] Allow users to submit bids and ensure multiple bids by the same user are allowed if their bid is not the highest.
     - [X] Api
-- [ ] Implement the auto-bidding feature:
-    - [ ] Add a checkbox to activate auto-bidding.
-    - [ ] Automatically outbid other users by $1 when auto-bidding is activated.
+- [X] Implement the auto-bidding feature:
+    - [X] Add a checkbox to activate auto-bidding.
+    - [X] Automatically outbid other users by $1 when auto-bidding is activated.
 
 #### 1.3. Auto-Bidding Configuration
 
-- [ ] Create a separate page for configuring auto-bidding parameters.
+- [X] Create a separate page for configuring auto-bidding parameters.
     - [X] Api
-- [ ] Allow users to set the maximum bid amount for auto-bidding.
+- [X] Allow users to set the maximum bid amount for auto-bidding.
     - [X] Api
-- [ ] Ensure the maximum amount is shared across all items with auto-bidding enabled.
+- [X] Ensure the maximum amount is shared across all items with auto-bidding enabled.
     - [X] Api
-- [ ] Implement bid alert notifications based on a user-defined percentage of the maximum bid amount.
+- [X] Implement bid alert notifications based on a user-defined percentage of the maximum bid amount.
     - [X] Api
-- [ ] Stop auto-bidding and notify the user when funds are insufficient.
+- [X] Stop auto-bidding and notify the user when funds are insufficient.
     - [X] Api
 
 #### 1.4. Administrator Dashboard Page
 
-- [ ] Implement a page where administrators can:
-    - [ ] Add new auction items.
+- [X] Implement a page where administrators can:
+    - [X] Add new auction items.
         - [X] Api
-    - [ ] View details of a single item.
+    - [X] View details of a single item.
         - [X] Api
-    - [ ] Modify the fields of an item.
+    - [X] Modify the fields of an item.
         - [X] Api
-    - [ ] Remove an item.
+    - [X] Remove an item.
         - [X] Api
-- [ ] Ensure regular users can only view the list and details of auction items.
+- [X] Ensure regular users can only view the list and details of auction items.
     - [X] Api
 
 #### 1.5. Additional Tasks
 
-- [ ] Implement user authentication and role management (admin vs. regular user).
+- [X] Implement user authentication and role management (admin vs. regular user).
     - [X] Api
-- [ ] Design the user interface with good usability principles.
-- [ ] Handle concurrency issues, especially with the auto-bidding feature.
+- [X] Design the user interface with good usability principles.
+- [X] Handle concurrency issues, especially with the auto-bidding feature.
     - [X] Api
-- [ ] Implement notifications for bid alerts and auto-bidding status.
+- [X] Implement notifications for bid alerts and auto-bidding status.
     - [X] Api
-- [ ] Ensure the application is secure and handles edge cases (e.g., simultaneous bids).
+- [X] Ensure the application is secure and handles edge cases (e.g., simultaneous bids).
     - [X] Api
 
 #### 1.6. Testing
