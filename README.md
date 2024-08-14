@@ -82,7 +82,9 @@
 4. NodeJs 20.0
 5. NPM
 
-##### 2.1.1. Backend Laravel
+#### 2.2. Installation
+
+##### 2.2.1. Backend Laravel
 
 1. Clone the repository
 
@@ -156,7 +158,40 @@ php artisan queue:work --queue=autobid_execution --sleep=1 --tries=1
 
 13. Export the postman collection and environment file from the `postman` to test the API
 
-##### 2.1.2. Frontend NextJs
+##### 2.2.2. Frontend NextJs
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/Syafiqq/auction_system_fe.git
+```
+
+2. Change directory
+
+```bash
+cd auction_system_fe
+```
+
+3. Install dependencies
+
+```bash
+npm install
+```
+
+4. Update constants in `src/common/constants.js`
+
+```bash
+export const BASE_URL_API = // THE BE API
+
+// example
+export const BASE_URL_API = "http://localhost:8000/api/"
+```
+
+5. Start the NextJs development server
+
+```bash
+npm run dev
+```
 
 #### TBA
 
