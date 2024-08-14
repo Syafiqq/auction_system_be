@@ -24,7 +24,7 @@ class InAppNotificationLocalDataSourceImpl implements InAppNotificationLocalData
         int $itemPerPage
     ): AbstractPaginator
     {
-        return InAppNotification::query()->where('user_id', $userId)->paginate($itemPerPage, page: $page);
+        return InAppNotification::query()->where('user_id', $userId)->orderByDesc('created_at')->paginate($itemPerPage, page: $page);
     }
 
     /**
