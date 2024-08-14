@@ -144,7 +144,8 @@ php artisan schedule:work
 12. Run job for autobid
 
 ```bash
-php artisan queue:work
+php artisan queue:work --queue=autobid_preparation --sleep=1 --tries=1
+php artisan queue:work --queue=autobid_execution --sleep=1 --tries=1
 ```
 
 13. Export the postman collection and environment file from the `postman` to test the API
