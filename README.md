@@ -210,6 +210,9 @@ npm run dev
 - Transaction Management: Some application processes are not fully transactional, which poses a risk of incomplete or
   inconsistent data if an error occurs. Ensuring that all critical processes are handled transactionally would mitigate
   this risk and improve data integrity.
+- User Interface Enhancements: The user interface could benefit from additional features to enhance usability and
+  engagement. Consider incorporating features such as real-time updates, interactive elements, and intuitive navigation
+  to create a more dynamic and user-friendly experience.
 
 ### 4. Limitations:
 
@@ -228,3 +231,6 @@ npm run dev
   new autobid process. This approach may need further evaluation to ensure optimal functionality.
 - Image Upload Constraints: Currently, the system does not impose constraints on image upload sizes. Implementing size
   limitations would help manage storage and performance, ensuring that uploaded images are appropriately sized.
+- Current Price information: Current price information is updated only when a bid is placed. This may lead to discrepancies
+  in the displayed price if multiple users are bidding simultaneously. Implementing real-time price updates would enhance
+  user experience and provide accurate information.
