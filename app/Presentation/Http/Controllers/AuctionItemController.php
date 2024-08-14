@@ -95,7 +95,7 @@ class AuctionItemController
                     $request->starting_price,
                     $request->end_time,
                     $request->retained_old_images ?? [],
-                    $request->images,
+                    $request->images ?? [],
                     []
                 ),
                 $request->id,

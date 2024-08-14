@@ -38,8 +38,8 @@ class AuctionItemUpdateRequest extends FormRequest
             'description' => ['required'],
             'starting_price' => ['required', 'integer'],
             'end_time' => ['required', 'date_format:d-m-Y'],
-            'retained_old_images.*' => ['nullable', 'array'],
-            'images.*' => ['required', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'retained_old_images.*' => ['nullable'],
+            'images.*' => ['nullable', 'mimes:jpeg,png,jpg', 'max:2048'],
         ];
     }
 
