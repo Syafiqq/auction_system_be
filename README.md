@@ -74,7 +74,13 @@
 
 ### 2. Deployment
 
-#### 2.1. Installation
+#### 2.1. Prerequisite
+
+1. PHP >= 8.3
+2. Laravel 11.18
+3. Composer
+4. NodeJs 20.0
+5. NPM
 
 ##### 2.1.1. Backend Laravel
 
