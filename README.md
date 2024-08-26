@@ -184,7 +184,7 @@ npm install
 export const BASE_URL_API = // THE BE API
 
 // example
-export const BASE_URL_API = "http://localhost:8000/api/"
+export const BASE_URL_API = "http://127.0.0.1:8000/api/"
 ```
 
 5. Start the NextJs development server
@@ -192,8 +192,6 @@ export const BASE_URL_API = "http://localhost:8000/api/"
 ```bash
 npm run dev
 ```
-
-#### TBA
 
 ### 3. Areas for Improvement:
 
