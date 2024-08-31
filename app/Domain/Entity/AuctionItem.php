@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Override;
@@ -31,6 +32,7 @@ use Override;
  * @property-read Bid|null $winner
  * @property-read UserAuctionAutobid|null $autobid
  * @property-read Bill|null $bill
+ * @property-read User|null $winnerUser
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
  * @mixin Eloquent
  */
@@ -103,6 +105,18 @@ class AuctionItem extends Model
     public function bill(): HasOne
     {
         return $this->hasOne(Bill::class);
+    }
+
+    public function winnerUser(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Bid::class,
+            'id',
+            'id',
+            'winner_id',
+            'user_id'
+        );
     }
 
     /**

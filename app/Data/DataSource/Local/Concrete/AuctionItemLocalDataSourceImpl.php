@@ -10,6 +10,7 @@ use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemWinnerSearchRequestDto;
 use App\Domain\Entity\Enum\BidStatusEnum;
 use App\Domain\Entity\UserAuctionAutobid;
 use Illuminate\Database\Eloquent\Builder;
@@ -110,6 +111,33 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
         $query->orderBy('bids1.bid_at', 'desc');
 
         return $query
+            ->with('images')
+            ->paginate($itemPerPage, page: $page);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findWinnerUserPaginated(
+        AuctionItemWinnerSearchRequestDto $searchQuery,
+        int                               $page,
+        int                               $itemPerPage
+    ): AbstractPaginator
+    {
+        $query = AuctionItem::query();
+
+        $query
+            ->select('auction_items.*')
+            ->leftJoin('bids', 'auction_items.winner_id', '=', 'bids.id');
+
+        $this->_queryAuctionItemSearchByName($query, $searchQuery->name, $searchQuery->description);
+
+        $query->where('bids.user_id', $searchQuery->userId);
+
+        return $query
+            ->with('bill')
+            ->with('winnerUser')
             ->with('images')
             ->paginate($itemPerPage, page: $page);
     }
