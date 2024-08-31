@@ -12,6 +12,7 @@ use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use App\Domain\Entity\UserAuctionAutobid;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Override;
 use Ramsey\Uuid\Uuid;
 
@@ -33,22 +34,28 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
     {
         $query = AuctionItem::query();
 
+        $query->select('auction_items.*', DB::raw('COALESCE(MAX(bids.amount), auction_items.starting_price) AS total_bid_amount'))
+            ->leftJoin('bids', 'auction_items.id', '=', 'bids.auction_item_id');
+
         $nameQuery = $searchQuery->name;
         if ($nameQuery !== null && $nameQuery !== '') {
-            $query->where('name', 'like', '%' . $nameQuery . '%');
+            $query->where('auction_items.name', 'like', '%' . $nameQuery . '%');
         }
 
         $descriptionQuery = $searchQuery->description;
         if ($descriptionQuery !== null && $descriptionQuery !== '') {
-            $query->where('description', 'like', '%' . $descriptionQuery . '%');
+            $query->where('auction_items.description', 'like', '%' . $descriptionQuery . '%');
         }
 
         $isAsc = $searchQuery->isAsc;
         if ($isAsc !== null) {
-            $query->orderBy('starting_price', $isAsc ? 'asc' : 'desc');
+            $query->orderBy('total_bid_amount', $isAsc ? 'asc' : 'desc');
         }
 
-        return $query->with('images')->paginate($itemPerPage, page: $page);
+        return $query
+            ->groupBy('auction_items.id')
+            ->with('images')
+            ->paginate($itemPerPage, page: $page);
     }
 
     /**
