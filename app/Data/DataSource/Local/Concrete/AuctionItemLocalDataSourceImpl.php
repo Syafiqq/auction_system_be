@@ -10,6 +10,7 @@ use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use App\Domain\Entity\UserAuctionAutobid;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -37,15 +38,7 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
         $query->select('auction_items.*', DB::raw('COALESCE(MAX(bids.amount), auction_items.starting_price) AS total_bid_amount'))
             ->leftJoin('bids', 'auction_items.id', '=', 'bids.auction_item_id');
 
-        $nameQuery = $searchQuery->name;
-        if ($nameQuery !== null && $nameQuery !== '') {
-            $query->where('auction_items.name', 'like', '%' . $nameQuery . '%');
-        }
-
-        $descriptionQuery = $searchQuery->description;
-        if ($descriptionQuery !== null && $descriptionQuery !== '') {
-            $query->where('auction_items.description', 'like', '%' . $descriptionQuery . '%');
-        }
+        $this->_queryAuctionItemSearchByName($query, $searchQuery->name, $searchQuery->description);
 
         $isAsc = $searchQuery->isAsc;
         if ($isAsc !== null) {
@@ -235,5 +228,29 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
 
         return $query->pluck('user_id')
             ->toArray();
+    }
+
+
+    /**
+     * @param Builder<AuctionItem> $query
+     * @param string|null $name
+     * @param string|null $description
+     * @return void
+     *
+     * @visibleForTesting
+     */
+    private function _queryAuctionItemSearchByName(
+        Builder $query,
+        ?string $name,
+        ?string $description
+    ): void
+    {
+        if ($name !== null && $name !== '') {
+            $query->where('auction_items.name', 'like', '%' . $name . '%');
+        }
+
+        if ($description !== null && $description !== '') {
+            $query->where('auction_items.description', 'like', '%' . $description . '%');
+        }
     }
 }
