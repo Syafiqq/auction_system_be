@@ -6,6 +6,7 @@ use App\Data\DataSource\Local\Abstract\AuctionItemLocalDataSource;
 use App\Domain\Entity\AuctionItem;
 use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use App\Domain\Repository\AuctionItemRepository;
@@ -32,6 +33,19 @@ class AuctionItemRepositoryImpl implements AuctionItemRepository
     ): AbstractPaginator
     {
         return $this->localDataSource->findPaginated($searchQuery, $page, $itemPerPage);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findOwnedUserPaginatedFromLocal(
+        AuctionItemOwnedUserSearchRequestDto $searchQuery,
+        int                                  $page,
+        int                                  $itemPerPage
+    ): AbstractPaginator
+    {
+        return $this->localDataSource->findOwnedUserPaginated($searchQuery, $page, $itemPerPage);
     }
 
     /**

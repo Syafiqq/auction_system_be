@@ -5,6 +5,7 @@ namespace App\Domain\Repository;
 use App\Domain\Entity\AuctionItem;
 use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,6 +25,18 @@ interface AuctionItemRepository
         AuctionItemSearchRequestDto $searchQuery,
         int                         $page,
         int                         $itemPerPage
+    ): AbstractPaginator;
+
+    /**
+     * @param AuctionItemOwnedUserSearchRequestDto $searchQuery
+     * @param int $page
+     * @param int $itemPerPage
+     * @return AbstractPaginator<AuctionItem>
+     */
+    public function findOwnedUserPaginatedFromLocal(
+        AuctionItemOwnedUserSearchRequestDto $searchQuery,
+        int                                  $page,
+        int                                  $itemPerPage
     ): AbstractPaginator;
 
     /**

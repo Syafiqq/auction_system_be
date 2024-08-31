@@ -7,8 +7,10 @@ use App\Domain\Entity\AuctionItem;
 use App\Domain\Entity\AuctionItemImage;
 use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
+use App\Domain\Entity\Enum\BidStatusEnum;
 use App\Domain\Entity\UserAuctionAutobid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\AbstractPaginator;
@@ -47,6 +49,67 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
 
         return $query
             ->groupBy('auction_items.id')
+            ->with('images')
+            ->paginate($itemPerPage, page: $page);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findOwnedUserPaginated(
+        AuctionItemOwnedUserSearchRequestDto $searchQuery,
+        int                                  $page,
+        int                                  $itemPerPage
+    ): AbstractPaginator
+    {
+        $query = AuctionItem::query();
+
+        $query
+            ->select('auction_items.*')
+            ->leftJoinSub('SELECT auction_item_id, user_id, MAX(id) AS latest_bid, bid_at FROM bids GROUP BY auction_item_id',
+                'bids1',
+                'auction_items.id',
+                '=',
+                'bids1.auction_item_id'
+            );
+
+        $this->_queryAuctionItemSearchByName($query, $searchQuery->name, $searchQuery->description);
+
+        $query->where(function ($query) use ($searchQuery) {
+            $query->where(false);
+            foreach ($searchQuery->bidStatuses as $status) {
+                switch ($status) {
+                    case BidStatusEnum::win:
+                        $query->orWhere(function ($query) use ($searchQuery) {
+                            $query->where('auction_items.has_winner', true)
+                                ->where('bids1.user_id', $searchQuery->userId);
+                        });
+                        break;
+                    case BidStatusEnum::lose:
+                        $query->orWhere(function ($query) use ($searchQuery) {
+                            $query->where('auction_items.has_winner', true)
+                                ->where('bids1.user_id', '!=', $searchQuery->userId);
+                        });
+                        break;
+                    case BidStatusEnum::inProgressLeading:
+                        $query->orWhere(function ($query) use ($searchQuery) {
+                            $query->where('auction_items.has_winner', false)
+                                ->where('bids1.user_id', $searchQuery->userId);
+                        });
+                        break;
+                    case BidStatusEnum::inProgress:
+                        $query->orWhere(function ($query) use ($searchQuery) {
+                            $query->where('auction_items.has_winner', false)
+                                ->where('bids1.user_id', '!=', $searchQuery->userId);
+                        });
+                        break;
+                }
+            }
+        });
+        $query->orderBy('bids1.bid_at', 'desc');
+
+        return $query
             ->with('images')
             ->paginate($itemPerPage, page: $page);
     }
