@@ -89,4 +89,25 @@ class BidLocalDataSourceImpl implements BidLocalDataSource
 
         return $sum;
     }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findUsersOfBidAuction(
+        int $bidId,
+    ): Collection
+    {
+        $bid = Bid::query()->findOrFail($bidId);
+
+        $userIds = Bid::query()
+            ->where('auction_item_id', $bid->auction_item_id)
+            ->pluck('user_id', 'user_id')
+            ->toArray();
+        $userIds = array_keys($userIds);
+
+        return User::query()
+            ->whereIn('id', $userIds)
+            ->get();
+    }
 }

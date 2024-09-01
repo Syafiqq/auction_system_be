@@ -8,6 +8,7 @@ use App\Domain\Entity\Dto\BidRequestDto;
 use App\Domain\Entity\Enum\BidTypeEnum;
 use App\Domain\Entity\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 
 interface BidRepository
 {
@@ -41,4 +42,13 @@ interface BidRepository
     public function findNewestFromLocal(int $at): Bid;
 
     public function getAutobidUsageFromLocal(User $for, int $except): int;
+
+    /**
+     * @param int $bidId
+     * @return Collection<User>
+     * @throws ModelNotFoundException<Bid>
+     */
+    public function findUsersOfBidAuctionFromLocal(
+        int $bidId,
+    ): Collection;
 }
