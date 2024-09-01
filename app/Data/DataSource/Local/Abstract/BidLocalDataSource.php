@@ -19,6 +19,13 @@ interface BidLocalDataSource
     public function insert(BidRequestDto $data, BidTypeEnum $type): Bid;
 
     /**
+     * @param int $id
+     * @return Bid
+     * @throws ModelNotFoundException
+     */
+    public function find(int $id): Bid;
+
+    /**
      * @param int $at
      * @return Bid
      * @throws ModelNotFoundException
