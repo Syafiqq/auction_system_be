@@ -48,6 +48,9 @@ Route::prefix('auction')
 
         Route::patch('{id}/autobid', [AuctionItemController::class, 'autobidUpdate'])
             ->name('api.auction.autobid.update');
+
+        Route::get('{id}/bill', [AuctionItemController::class, 'bill'])
+            ->name('api.auction.bill');
     });
 
 Route::prefix('notification')
