@@ -13,6 +13,7 @@ use App\Domain\Repository\InAppNotificationRepository;
 use App\Domain\Repository\UserRepository;
 use App\Domain\UseCase\Abstract\PlaceAutoBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
+use App\Presentation\Jobs\BidPlacedMailBroadcastJob;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use NumberFormatter;
 use Override;
@@ -109,5 +110,7 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
                 ]
             )
         );
+        BidPlacedMailBroadcastJob::dispatch($bid->id)
+            ->onQueue('mailer');
     }
 }

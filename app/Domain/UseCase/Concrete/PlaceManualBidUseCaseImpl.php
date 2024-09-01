@@ -10,6 +10,7 @@ use App\Domain\Repository\BidRepository;
 use App\Domain\UseCase\Abstract\PlaceManualBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
 use App\Presentation\Jobs\AutobidPreparationJob;
+use App\Presentation\Jobs\BidPlacedMailBroadcastJob;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Override;
 
@@ -44,6 +45,8 @@ class PlaceManualBidUseCaseImpl implements PlaceManualBidUseCase
 
         AutobidPreparationJob::dispatch($bid->id ?? 1, $auction->id, $data->user->id)
             ->onQueue('autobid_preparation');
+        BidPlacedMailBroadcastJob::dispatch($result->id)
+            ->onQueue('mailer');
 
         return $result;
     }
