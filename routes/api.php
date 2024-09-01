@@ -51,6 +51,8 @@ Route::prefix('auction')
 
         Route::get('{id}/bill', [AuctionItemController::class, 'bill'])
             ->name('api.auction.bill');
+        Route::post('{id}/bill', [AuctionItemController::class, 'pay'])
+            ->name('api.auction.pay');
     });
 
 Route::prefix('notification')
