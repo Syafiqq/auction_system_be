@@ -39,8 +39,7 @@ class UserController
                 $request->percentage
             );
             return UserResource::new($response)->toResponse($request);
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
+        } catch (Exception) {
             return response()->json(null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
