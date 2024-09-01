@@ -38,4 +38,17 @@ class BillRepositoryImpl implements BillRepository
     {
         return $this->localDataSource->findBill($user_id, $auction_item_id, $bid_id);
     }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function payToLocal(
+        string $user_id,
+        string $auction_item_id,
+        string $bid_id
+    ): Bill
+    {
+        return $this->localDataSource->pay($user_id, $auction_item_id, $bid_id);
+    }
 }
