@@ -23,6 +23,8 @@ Route::prefix('profile')
             ->name('api.profile.index');
         Route::get('auctions', [UserController::class, 'auctions'])
             ->name('api.profile.auctions');
+        Route::get('winner', [UserController::class, 'winner'])
+            ->name('api.profile.winner');
         Route::patch('autobid', [UserController::class, 'updateAutobid'])
             ->name('api.profile.autobid');
     });
