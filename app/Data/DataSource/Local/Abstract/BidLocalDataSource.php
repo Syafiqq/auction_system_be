@@ -26,6 +26,13 @@ interface BidLocalDataSource
     public function find(int $id): Bid;
 
     /**
+     * @param int $id
+     * @return Bid
+     * @throws ModelNotFoundException
+     */
+    public function findWithUser(int $id): Bid;
+
+    /**
      * @param int $at
      * @return Bid
      * @throws ModelNotFoundException

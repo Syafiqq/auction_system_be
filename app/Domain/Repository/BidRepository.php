@@ -27,6 +27,13 @@ interface BidRepository
     public function findFromLocal(int $id): Bid;
 
     /**
+     * @param int $id
+     * @return Bid
+     * @throws ModelNotFoundException
+     */
+    public function findWithUserFromLocal(int $id): Bid;
+
+    /**
      * @param int $at
      * @return Bid
      * @throws ModelNotFoundException

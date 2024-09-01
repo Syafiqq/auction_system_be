@@ -45,6 +45,15 @@ class BidLocalDataSourceImpl implements BidLocalDataSource
      * @inheritDoc
      */
     #[Override]
+    public function findWithUser(int $id): Bid
+    {
+        return Bid::with('user')->findOrFail($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
     public function findNewest(int $at): Bid
     {
         return Bid::where('auction_item_id', $at)
