@@ -40,9 +40,11 @@ class PlaceManualBidUseCaseImpl implements PlaceManualBidUseCase
 
         $this->validate($auction, $bid, $data);
 
+        $result = $this->bidRepository->insertToLocal($data, BidTypeEnum::manual);
+
         AutobidPreparationJob::dispatch($bid->id ?? 1, $auction->id, $data->user->id)
             ->onQueue('autobid_preparation');
 
-        return $this->bidRepository->insertToLocal($data, BidTypeEnum::manual);
+        return $result;
     }
 }
