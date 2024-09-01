@@ -176,7 +176,9 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
     #[Override]
     public function find(int $at): AuctionItem
     {
-        return AuctionItem::with('images')->findOrFail($at);
+        return AuctionItem::with('images')
+            ->with('winnerUser')
+            ->findOrFail($at);
     }
 
     /**

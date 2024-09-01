@@ -36,6 +36,7 @@ class AuctionItemResource extends JsonResource
             'autobid' => boolval($this->autobids->first->is_autobid),
             'has_winner' => $this->has_winner,
             'winner_id' => $this->winner_id,
+            'winner_user' => UserLimitedResource::new($this->winnerUser),
         ];
     }
 }
