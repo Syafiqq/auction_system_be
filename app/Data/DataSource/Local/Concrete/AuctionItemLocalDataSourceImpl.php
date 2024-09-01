@@ -10,6 +10,7 @@ use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemWinnerRequestDto;
 use App\Domain\Entity\Dto\AuctionItemWinnerSearchRequestDto;
 use App\Domain\Entity\Enum\BidStatusEnum;
 use App\Domain\Entity\UserAuctionAutobid;
@@ -189,6 +190,26 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
                 $query->where('user_id', $for);
             }])
             ->findOrFail($at);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findWinner(AuctionItemWinnerRequestDto $for): AuctionItem
+    {
+        $query = AuctionItem::query();
+
+        $query
+            ->select('auction_items.*')
+            ->leftJoin('bids', 'auction_items.winner_id', '=', 'bids.id');
+
+        $query->where('bids.user_id', $for->userId);
+
+        return $query
+            ->with('bill')
+            ->with('winnerUser')
+            ->findOrFail($for->auctionId);
     }
 
     /**

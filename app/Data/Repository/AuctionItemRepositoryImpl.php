@@ -9,6 +9,7 @@ use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemWinnerRequestDto;
 use App\Domain\Entity\Dto\AuctionItemWinnerSearchRequestDto;
 use App\Domain\Repository\AuctionItemRepository;
 use Illuminate\Pagination\AbstractPaginator;
@@ -89,6 +90,15 @@ class AuctionItemRepositoryImpl implements AuctionItemRepository
     public function findForFromLocal(int $at, int $for): AuctionItem
     {
         return $this->localDataSource->findFor($at, $for);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findWinnerFromLocal(AuctionItemWinnerRequestDto $for): AuctionItem
+    {
+        return $this->localDataSource->findWinner($for);
     }
 
     /**

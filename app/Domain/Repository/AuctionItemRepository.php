@@ -8,6 +8,7 @@ use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemWinnerRequestDto;
 use App\Domain\Entity\Dto\AuctionItemWinnerSearchRequestDto;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\AbstractPaginator;
@@ -72,6 +73,13 @@ interface AuctionItemRepository
      * @throws ModelNotFoundException<AuctionItem>
      */
     public function findForFromLocal(int $at, int $for): AuctionItem;
+
+    /**
+     * @param AuctionItemWinnerRequestDto $for
+     * @return AuctionItem
+     * @throws ModelNotFoundException<AuctionItem>
+     */
+    public function findWinnerFromLocal(AuctionItemWinnerRequestDto $for): AuctionItem;
 
     /**
      * @param AuctionItemUpdateRequestDto $data
