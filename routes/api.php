@@ -21,6 +21,8 @@ Route::prefix('profile')
     ->group(function () {
         Route::get('', [UserController::class, 'index'])
             ->name('api.profile.index');
+        Route::get('auctions', [UserController::class, 'auctions'])
+            ->name('api.profile.auctions');
         Route::patch('autobid', [UserController::class, 'updateAutobid'])
             ->name('api.profile.autobid');
     });
