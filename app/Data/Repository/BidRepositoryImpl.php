@@ -41,6 +41,15 @@ class BidRepositoryImpl implements BidRepository
      * @inheritDoc
      */
     #[Override]
+    public function findLastTwoBidFromLocal(int $id): Collection
+    {
+        return $this->localDataSource->findLastTwoBid($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
     public function findWithUserFromLocal(int $id): Bid
     {
         return $this->localDataSource->findWithUser($id);

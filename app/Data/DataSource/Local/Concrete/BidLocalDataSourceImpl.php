@@ -45,6 +45,29 @@ class BidLocalDataSourceImpl implements BidLocalDataSource
      * @inheritDoc
      */
     #[Override]
+    public function findLastTwoBid(int $id): Collection
+    {
+        $bid = Bid::query()->where('id', $id)->first();
+        if ($bid == null) {
+            return collect([]);
+        }
+
+        $before = Bid::query()
+            ->where('auction_item_id', $bid->auction_item_id)
+            ->where('bid_at', '<', $bid->bid_at)
+            ->orderByDesc('bid_at')
+            ->first();
+        if ($before == null) {
+            return collect([$bid]);
+        } else {
+            return collect([$bid, $before]);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
     public function findWithUser(int $id): Bid
     {
         return Bid::with('user')->findOrFail($id);

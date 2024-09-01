@@ -28,6 +28,12 @@ interface BidLocalDataSource
 
     /**
      * @param int $id
+     * @return Collection<Bid>
+     */
+    public function findLastTwoBid(int $id): Collection;
+
+    /**
+     * @param int $id
      * @return Bid
      * @throws ModelNotFoundException
      */

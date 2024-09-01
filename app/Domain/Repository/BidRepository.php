@@ -29,6 +29,12 @@ interface BidRepository
 
     /**
      * @param int $id
+     * @return Collection<Bid>
+     */
+    public function findLastTwoBidFromLocal(int $id): Collection;
+
+    /**
+     * @param int $id
      * @return Bid
      * @throws ModelNotFoundException
      */
