@@ -21,6 +21,7 @@ use Override;
  * @property int $id
  * @property string $username
  * @property string $password
+ * @property string $email
  * @property UserTypeEnum $type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
