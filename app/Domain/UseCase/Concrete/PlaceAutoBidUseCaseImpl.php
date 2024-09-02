@@ -14,6 +14,7 @@ use App\Domain\Repository\UserRepository;
 use App\Domain\UseCase\Abstract\PlaceAutoBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use NumberFormatter;
 use Override;
 
 class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
@@ -35,6 +36,8 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
     #[Override]
     public function execute(int $for, int $at): void
     {
+        $numberFormatter = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
+
         $user = $this->userRepository->findFromLocal($for);
 
         $auction = $this->auctionItemRepository->findFromLocal($at);
@@ -62,8 +65,8 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
                     [
                         'for' => $for,
                         'at' => $at,
-                        'balance' => $balance,
-                        'price' => $amount,
+                        'balance' => $numberFormatter->formatCurrency($balance, 'USD'),
+                        'price' => $numberFormatter->formatCurrency($amount, 'USD'),
                     ]
                 )
             );
@@ -102,7 +105,7 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
                     'for' => $bid->user_id,
                     'at' => $bid->auction_item_id,
                     'name' => $auction->name,
-                    'price' => $bid->amount,
+                    'price' => $numberFormatter->formatCurrency($bid->amount, 'USD'),
                 ]
             )
         );

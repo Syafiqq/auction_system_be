@@ -8,6 +8,7 @@ use App\Domain\Repository\BidRepository;
 use App\Domain\Repository\InAppNotificationRepository;
 use App\Domain\UseCase\Abstract\SetAuctionWinnerUseCase;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use NumberFormatter;
 use Override;
 
 class SetAuctionWinnerUseCaseImpl implements SetAuctionWinnerUseCase
@@ -40,6 +41,7 @@ class SetAuctionWinnerUseCaseImpl implements SetAuctionWinnerUseCase
             }
 
             if ($bid != null) {
+                $numberFormatter = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
                 $this->inAppNotificationRepository->insertToLocal(
                     NotificationType::bidWinner->builder(
                         1,
@@ -47,7 +49,7 @@ class SetAuctionWinnerUseCaseImpl implements SetAuctionWinnerUseCase
                             'for' => $bid->user_id,
                             'at' => $bid->auction_item_id,
                             'name' => $auction->name,
-                            'price' => $bid->amount,
+                            'price' => $numberFormatter->formatCurrency($bid->amount, 'USD'),
                         ]
                     )
                 );
