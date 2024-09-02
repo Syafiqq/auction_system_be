@@ -48,6 +48,10 @@ class AutobidPreparationJob implements ShouldQueue
             $userIds
         );
 
+        if (empty($autobidJobs)) {
+            return;
+        }
+
         $autobidJobIds = $autobidJobRepository->massInsertToLocal($autobidJobs);
 
         foreach ($autobidJobIds as $autobidJobId) {
