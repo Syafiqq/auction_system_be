@@ -26,10 +26,10 @@ enum NotificationType: string
     public function getDescription(int $version): string
     {
         return match ($this) {
-            self::insufficientAutoBidBalance => 'You have insufficient balance to place an autobid, current balance `$%d`, required price `$%d`',
-            self::bidWinner => 'Congratulations! You have won the auction of `%s` at the price of `$%d`',
+            self::insufficientAutoBidBalance => 'You have insufficient balance to place an autobid, current balance `%d`, required price `%d`',
+            self::bidWinner => 'Congratulations! You have won the auction of `%s` at the price of `%s`',
             self::autobidUsageWarning => 'You have used `%.2f%%` of your auto bid balance',
-            self::autobidPlaced => 'Auto bid placed for `%s` at the price of `$%d`',
+            self::autobidPlaced => 'Auto bid placed for `%s` at the price of `%s`',
         };
     }
 }
