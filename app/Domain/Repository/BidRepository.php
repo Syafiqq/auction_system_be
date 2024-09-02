@@ -47,6 +47,13 @@ interface BidRepository
      */
     public function findNewestFromLocal(int $at): Bid;
 
+    /**
+     * @param int $userId
+     * @param int $auctionId
+     * @return Bid|null
+     */
+    public function findLatestBidFromLocal(int $userId, int $auctionId): ?Bid;
+
     public function getAutobidUsageFromLocal(User $for, int $except): int;
 
     /**

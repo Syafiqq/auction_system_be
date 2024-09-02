@@ -64,6 +64,15 @@ class BidRepositoryImpl implements BidRepository
         return $this->localDataSource->findNewest($at);
     }
 
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findLatestBidFromLocal(int $userId, int $auctionId): ?Bid
+    {
+        return $this->localDataSource->findLatestBid($userId, $auctionId);
+    }
+
     #[Override]
     public function getAutobidUsageFromLocal(User $for, int $except): int
     {

@@ -85,6 +85,19 @@ class BidLocalDataSourceImpl implements BidLocalDataSource
             ->firstOrFail();
     }
 
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findLatestBid(int $userId, int $auctionId): ?Bid
+    {
+        return Bid::query()
+            ->where('auction_item_id', $auctionId)
+            ->where('user_id', $userId)
+            ->orderByDesc('id')
+            ->first();
+    }
+
     #[Override]
     public function getAutobidUsage(User $for, int $except): int
     {
