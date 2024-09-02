@@ -9,6 +9,8 @@ use App\Domain\Repository\AuctionItemRepository;
 use App\Domain\Repository\BidRepository;
 use App\Domain\UseCase\Abstract\PlaceManualBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
+use App\Presentation\Events\BidPlacedDetailEvent;
+use App\Presentation\Events\BidPlacedGlobalEvent;
 use App\Presentation\Jobs\AutobidPreparationJob;
 use App\Presentation\Jobs\BidPlacedMailBroadcastJob;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -47,6 +49,8 @@ class PlaceManualBidUseCaseImpl implements PlaceManualBidUseCase
             ->onQueue('autobid_preparation');
         BidPlacedMailBroadcastJob::dispatch($result->id)
             ->onQueue('mailer');
+        BidPlacedGlobalEvent::dispatch($result);
+        BidPlacedDetailEvent::dispatch($result);
 
         return $result;
     }

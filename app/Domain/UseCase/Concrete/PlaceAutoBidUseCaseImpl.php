@@ -13,6 +13,8 @@ use App\Domain\Repository\InAppNotificationRepository;
 use App\Domain\Repository\UserRepository;
 use App\Domain\UseCase\Abstract\PlaceAutoBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
+use App\Presentation\Events\BidPlacedDetailEvent;
+use App\Presentation\Events\BidPlacedGlobalEvent;
 use App\Presentation\Jobs\BidPlacedMailBroadcastJob;
 use App\Presentation\Mail\AutoBidExceedMailer;
 use App\Presentation\Mail\Presenter\AutoBidExceedMailPresenter;
@@ -131,5 +133,7 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
         );
         BidPlacedMailBroadcastJob::dispatch($bid->id)
             ->onQueue('mailer');
+        BidPlacedGlobalEvent::dispatch($bid);
+        BidPlacedDetailEvent::dispatch($bid);
     }
 }
