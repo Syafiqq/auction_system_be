@@ -131,4 +131,9 @@ class AuctionItem extends Model
             'end_time' => 'datetime',
         ];
     }
+
+    public function idPadded(): string
+    {
+        return str_pad((string)$this->id, 10, '0', STR_PAD_LEFT);
+    }
 }

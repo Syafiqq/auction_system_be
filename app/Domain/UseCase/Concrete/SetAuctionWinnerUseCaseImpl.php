@@ -2,12 +2,17 @@
 
 namespace App\Domain\UseCase\Concrete;
 
+use App\Domain\Entity\AuctionItem;
+use App\Domain\Entity\Bill;
+use App\Domain\Entity\Enum\BillStatusEnum;
 use App\Domain\Entity\Enum\NotificationType;
 use App\Domain\Repository\AuctionItemRepository;
 use App\Domain\Repository\BidRepository;
+use App\Domain\Repository\BillRepository;
 use App\Domain\Repository\InAppNotificationRepository;
 use App\Domain\UseCase\Abstract\SetAuctionWinnerUseCase;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 use NumberFormatter;
 use Override;
 
@@ -17,6 +22,7 @@ class SetAuctionWinnerUseCaseImpl implements SetAuctionWinnerUseCase
         protected BidRepository               $bidRepository,
         protected AuctionItemRepository       $auctionItemRepository,
         protected InAppNotificationRepository $inAppNotificationRepository,
+        protected BillRepository              $billRepository,
     )
     {
     }
@@ -27,6 +33,7 @@ class SetAuctionWinnerUseCaseImpl implements SetAuctionWinnerUseCase
     #[Override]
     public function execute(): void
     {
+        /** @var Collection<AuctionItem> $auctions */
         $auctions = $this->auctionItemRepository->findUndecidedWinnerFromLocal();
 
         if ($auctions->isEmpty()) {
@@ -56,6 +63,18 @@ class SetAuctionWinnerUseCaseImpl implements SetAuctionWinnerUseCase
             }
 
             $this->auctionItemRepository->setWinnerToLocal($auction, $bid);
+            $this->billRepository->insertToLocal(new Bill([
+                'user_id' => $bid->user_id,
+                'auction_item_id' => $bid->auction_item_id,
+                'bid_id' => $bid->id,
+                'no' => $auction->idPadded(),
+                'issued_at' => now(),
+                'due_at' => now()->addDays(7),
+                'paid_at' => null,
+                'status' => BillStatusEnum::unpaid,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]));
         }
     }
 }
