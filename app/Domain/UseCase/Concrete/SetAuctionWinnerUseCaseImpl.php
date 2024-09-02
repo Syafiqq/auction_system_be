@@ -11,6 +11,7 @@ use App\Domain\Repository\BidRepository;
 use App\Domain\Repository\BillRepository;
 use App\Domain\Repository\InAppNotificationRepository;
 use App\Domain\UseCase\Abstract\SetAuctionWinnerUseCase;
+use App\Presentation\Jobs\AuctionWinnerMailPreparationJob;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use NumberFormatter;
@@ -75,6 +76,9 @@ class SetAuctionWinnerUseCaseImpl implements SetAuctionWinnerUseCase
                 'created_at' => now(),
                 'updated_at' => now(),
             ]));
+
+            AuctionWinnerMailPreparationJob::dispatch($bid->id)
+                ->onQueue('mailer');
         }
     }
 }
