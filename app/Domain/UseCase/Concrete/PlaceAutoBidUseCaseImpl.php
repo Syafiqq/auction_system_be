@@ -14,7 +14,10 @@ use App\Domain\Repository\UserRepository;
 use App\Domain\UseCase\Abstract\PlaceAutoBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
 use App\Presentation\Jobs\BidPlacedMailBroadcastJob;
+use App\Presentation\Mail\AutoBidExceedMailer;
+use App\Presentation\Mail\Presenter\AutoBidExceedMailPresenter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Mail\MailManager;
 use NumberFormatter;
 use Override;
 
@@ -27,6 +30,7 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
         protected BidRepository               $bidRepository,
         protected AuctionItemRepository       $auctionItemRepository,
         protected InAppNotificationRepository $inAppNotificationRepository,
+        protected MailManager                 $mailProvider,
     )
     {
     }
@@ -71,6 +75,21 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
                     ]
                 )
             );
+
+            $productId = $auction->id;
+            $this->mailProvider->to($user->email)
+                ->queue(
+                    new AutoBidExceedMailer(
+                        new AutoBidExceedMailPresenter(
+                            $auction->name,
+                            $balance,
+                            $amount,
+                            config('frontend.frontend_url') . "/auction/{$productId}/place-bid",
+                            config('frontend.frontend_url') . "/profile"
+                        )
+                    )
+                );
+
             throw new InsufficientAutobidException($balance, $amount);
         }
 
