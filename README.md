@@ -86,115 +86,110 @@
 
 ##### 2.2.1. Backend Laravel
 
-1. Clone the repository
+1. Download the private file from the drive
+
+2. Extract the private file
+
+3. Clone the BE
 
 ```bash
 git clone https://github.com/Syafiqq/auction_system_be.git
 ```
 
-2. Change directory
+4. Copy predefined data to the folder
+
+```bash
+cp -r be/. auction_system_be/
+```
+
+5. Change directory
 
 ```bash
 cd auction_system_be
 ```
 
-3. Install dependencies
+5. Install dependencies
 
 ```bash
 composer install
 ```
 
-4. Create a new `.env` file
+6. Run jobs
 
 ```bash
-cp .env.example .env
+php artisan queue:work --queue=autobid_preparation,autobid_execution,mailer,default --sleep=1 --tries=1
 ```
 
-5. Generate a new application key
-
-```bash
-php artisan key:generate
-```
-
-6. Set up the database connection in the `.env` file
-7. Run the database migrations
-
-```bash
-php artisan migrate
-```
-
-8. Make symlink of storage
-
-```bash
-php artisan storage:link
-```
-
-9. Start the Laravel development server
-
-```bash
-php artisan serve
-```
-
-10. The backend API should now be accessible at `http://localhost:8000`
-
-11. a. Setup cron job for the scheduler [Reference](https://laravel.com/docs/11.x/scheduling#running-the-scheduler)
-
-```bash
-* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
-```
-
-11. b. run the scheduler for placing the winner at 12PM
+7. Run cron
 
 ```bash
 php artisan schedule:work
 ```
 
-12. Run job for autobid
-
+7. If notting happens (because the cron is scheduled at 12AM) can use this command below
 ```bash
-php artisan queue:work --queue=autobid_preparation --sleep=1 --tries=1
-php artisan queue:work --queue=autobid_execution --sleep=1 --tries=1
+php artisan tinker
+
+use App\Domain\UseCase\Abstract\SetAuctionWinnerUseCase;
+
+app(SetAuctionWinnerUseCase::class)->execute();
 ```
 
-13. Export the postman collection and environment file from the `postman` to test the API
+8. Run the server
+```bash
+php artisan serve
+```
 
-##### 2.2.2. Frontend NextJs
-
-1. Clone the repository
+9. Clone the FE
 
 ```bash
 git clone https://github.com/Syafiqq/auction_system_fe.git
 ```
 
-2. Change directory
+10. Copy predefined data to the folder
+
+```bash
+cp -r fe/. auction_system_fe/
+```
+
+11. Change directory
 
 ```bash
 cd auction_system_fe
 ```
 
-3. Install dependencies
+12. Install dependencies
 
 ```bash
 npm install
 ```
 
-4. Update constants in `src/common/constants.js`
-
-```bash
-export const BASE_URL_API = // THE BE API
-
-// example
-export const BASE_URL_API = "http://127.0.0.1:8000/api/"
-```
-
-5. Start the NextJs development server
+13. Start the NextJs development server
 
 ```bash
 npm run dev
 ```
 
-### 3. Areas for Improvement:
+### Part 2 Improvement
 
+- Improve the setup process and/or instructions
+  - The app is now stateless
+- Improve validation messages
+  - Now the app can properly show the validation messages
+- Improve navigation and general UI/UX of app
+  - Fix issues when removing auction item
+  - Fix session end handler
+  - Fix redirection for some pages
+- Present amounts as dollar amounts, include cent handling.
+  - Done
+
+### Part 2 Issue
+- The app is stateless, so no CSRF is configured
+- The id should not be placed as url path or url query
+- The websocket should be authenticated
+- There is a delay when websocket is emitted maybe 5-10 seconds
+
+### Part 1 Issue
 - Notification Handling: The current notification system is closely integrated with the main workflow, which can impact
   efficiency. To enhance performance, consider delegating notifications, such as those for "auction ended" events, to a
   separate worker or service. This would allow notifications to be processed independently of the primary workflow,
@@ -211,9 +206,6 @@ npm run dev
 - User Interface Enhancements: The user interface could benefit from additional features to enhance usability and
   engagement. Consider incorporating features such as real-time updates, interactive elements, and intuitive navigation
   to create a more dynamic and user-friendly experience.
-
-### 4. Limitations:
-
 - Autobid Maximum Amount: The autobid's maximum amount is only applicable to subsequent bids and is not adjusted after a
   successful bid. This may lead to user confusion or unintended bidding behavior, and should be addressed to align with
   user expectations.
