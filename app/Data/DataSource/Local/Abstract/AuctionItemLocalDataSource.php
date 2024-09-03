@@ -11,6 +11,7 @@ use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
 use App\Domain\Entity\Dto\AuctionItemWinnerRequestDto;
 use App\Domain\Entity\Dto\AuctionItemWinnerSearchRequestDto;
+use App\Domain\Entity\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\AbstractPaginator;
@@ -53,6 +54,18 @@ interface AuctionItemLocalDataSource
         AuctionItemWinnerSearchRequestDto $searchQuery,
         int                               $page,
         int                               $itemPerPage
+    ): AbstractPaginator;
+
+    /**
+     * @param int $id
+     * @param int $page
+     * @param int $itemPerPage
+     * @return AbstractPaginator<User>
+     */
+    public function findParticipantsPaginated(
+        int $id,
+        int $page,
+        int $itemPerPage
     ): AbstractPaginator;
 
     /**

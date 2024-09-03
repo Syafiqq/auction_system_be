@@ -147,6 +147,24 @@ class AuctionItemLocalDataSourceImpl implements AuctionItemLocalDataSource
      * @inheritDoc
      */
     #[Override]
+    public function findParticipantsPaginated(
+        int $id,
+        int $page,
+        int $itemPerPage
+    ): AbstractPaginator
+    {
+        return Bid::query()
+            ->where('auction_item_id', $id)
+            ->orderBy('bid_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->with('user')
+            ->paginate($itemPerPage, page: $page);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
     public function insert(AuctionItemCreateRequestDto $data): AuctionItem
     {
         $builder = new AuctionItem();

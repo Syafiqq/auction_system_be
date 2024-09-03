@@ -67,6 +67,19 @@ class AuctionItemRepositoryImpl implements AuctionItemRepository
      * @inheritDoc
      */
     #[Override]
+    public function findParticipantsPaginatedFromLocal(
+        int $id,
+        int $page,
+        int $itemPerPage
+    ): AbstractPaginator
+    {
+        return $this->localDataSource->findParticipantsPaginated($id, $page, $itemPerPage);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
     public function insertToLocal(AuctionItemCreateRequestDto $data): AuctionItem
     {
         $paths = $this->localDataSource->saveImages($data->images);
