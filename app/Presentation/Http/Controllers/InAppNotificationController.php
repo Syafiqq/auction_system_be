@@ -29,8 +29,7 @@ class InAppNotificationController
             return AbstractPaginatorResourceCollection::new($response)
                 ->withMorph(fn($collection) => InAppNotificationResource::collection($collection))
                 ->toResponse($request);
-        } catch (Exception $exception) {
-            var_dump($exception->getMessage());
+        } catch (Exception) {
             return response()->json(null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

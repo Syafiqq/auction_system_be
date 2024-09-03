@@ -6,8 +6,12 @@ namespace App\Data\DataSource\Local\Abstract;
 use App\Domain\Entity\AuctionItem;
 use App\Domain\Entity\Bid;
 use App\Domain\Entity\Dto\AuctionItemCreateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemOwnedUserSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemSearchRequestDto;
 use App\Domain\Entity\Dto\AuctionItemUpdateRequestDto;
+use App\Domain\Entity\Dto\AuctionItemWinnerRequestDto;
+use App\Domain\Entity\Dto\AuctionItemWinnerSearchRequestDto;
+use App\Domain\Entity\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\AbstractPaginator;
@@ -26,6 +30,42 @@ interface AuctionItemLocalDataSource
         AuctionItemSearchRequestDto $searchQuery,
         int                         $page,
         int                         $itemPerPage
+    ): AbstractPaginator;
+
+    /**
+     * @param AuctionItemOwnedUserSearchRequestDto $searchQuery
+     * @param int $page
+     * @param int $itemPerPage
+     * @return AbstractPaginator<AuctionItem>
+     */
+    public function findOwnedUserPaginated(
+        AuctionItemOwnedUserSearchRequestDto $searchQuery,
+        int                                  $page,
+        int                                  $itemPerPage
+    ): AbstractPaginator;
+
+    /**
+     * @param AuctionItemWinnerSearchRequestDto $searchQuery
+     * @param int $page
+     * @param int $itemPerPage
+     * @return AbstractPaginator<AuctionItem>
+     */
+    public function findWinnerUserPaginated(
+        AuctionItemWinnerSearchRequestDto $searchQuery,
+        int                               $page,
+        int                               $itemPerPage
+    ): AbstractPaginator;
+
+    /**
+     * @param int $id
+     * @param int $page
+     * @param int $itemPerPage
+     * @return AbstractPaginator<User>
+     */
+    public function findParticipantsPaginated(
+        int $id,
+        int $page,
+        int $itemPerPage
     ): AbstractPaginator;
 
     /**
@@ -48,6 +88,13 @@ interface AuctionItemLocalDataSource
      * @throws ModelNotFoundException<AuctionItem>
      */
     public function findFor(int $at, int $for): AuctionItem;
+
+    /**
+     * @param AuctionItemWinnerRequestDto $for
+     * @return AuctionItem
+     * @throws ModelNotFoundException<AuctionItem>
+     */
+    public function findWinner(AuctionItemWinnerRequestDto $for): AuctionItem;
 
     /**
      * @param AuctionItemUpdateRequestDto $data

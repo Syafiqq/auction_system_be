@@ -13,7 +13,14 @@ use App\Domain\Repository\InAppNotificationRepository;
 use App\Domain\Repository\UserRepository;
 use App\Domain\UseCase\Abstract\PlaceAutoBidUseCase;
 use App\Domain\UseCase\Trait\PlaceBidPreparation;
+use App\Presentation\Events\BidPlacedDetailEvent;
+use App\Presentation\Events\BidPlacedGlobalEvent;
+use App\Presentation\Jobs\BidPlacedMailBroadcastJob;
+use App\Presentation\Mail\AutoBidExceedMailer;
+use App\Presentation\Mail\Presenter\AutoBidExceedMailPresenter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Mail\MailManager;
+use NumberFormatter;
 use Override;
 
 class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
@@ -25,6 +32,7 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
         protected BidRepository               $bidRepository,
         protected AuctionItemRepository       $auctionItemRepository,
         protected InAppNotificationRepository $inAppNotificationRepository,
+        protected MailManager                 $mailProvider,
     )
     {
     }
@@ -35,6 +43,8 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
     #[Override]
     public function execute(int $for, int $at): void
     {
+        $numberFormatter = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
+
         $user = $this->userRepository->findFromLocal($for);
 
         $auction = $this->auctionItemRepository->findFromLocal($at);
@@ -62,11 +72,26 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
                     [
                         'for' => $for,
                         'at' => $at,
-                        'balance' => $balance,
-                        'price' => $amount,
+                        'balance' => $numberFormatter->formatCurrency($balance, 'USD'),
+                        'price' => $numberFormatter->formatCurrency($amount, 'USD'),
                     ]
                 )
             );
+
+            $productId = $auction->id;
+            $this->mailProvider->to($user->email)
+                ->queue(
+                    new AutoBidExceedMailer(
+                        new AutoBidExceedMailPresenter(
+                            $auction->name,
+                            $balance,
+                            $amount,
+                            config('frontend.frontend_url') . "/auction/{$productId}/place-bid",
+                            config('frontend.frontend_url') . "/profile"
+                        )
+                    )
+                );
+
             throw new InsufficientAutobidException($balance, $amount);
         }
 
@@ -102,9 +127,13 @@ class PlaceAutoBidUseCaseImpl implements PlaceAutoBidUseCase
                     'for' => $bid->user_id,
                     'at' => $bid->auction_item_id,
                     'name' => $auction->name,
-                    'price' => $bid->amount,
+                    'price' => $numberFormatter->formatCurrency($bid->amount, 'USD'),
                 ]
             )
         );
+        BidPlacedMailBroadcastJob::dispatch($bid->id)
+            ->onQueue('mailer');
+        BidPlacedGlobalEvent::dispatch($bid);
+        BidPlacedDetailEvent::dispatch($bid);
     }
 }

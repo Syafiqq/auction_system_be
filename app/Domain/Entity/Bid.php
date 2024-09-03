@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Override;
@@ -20,6 +21,7 @@ use Override;
  * @property int $auction_item_id
  * @property-read AuctionItem|null $auctionItem
  * @property-read User|null $user
+ * @property-read Bill|null $bill
  * @mixin Eloquent
  */
 class Bid extends Model
@@ -61,6 +63,11 @@ class Bid extends Model
     public function auctionItem(): BelongsTo
     {
         return $this->belongsTo(AuctionItem::class);
+    }
+
+    public function bill(): HasOne
+    {
+        return $this->hasOne(Bill::class);
     }
 
     /**

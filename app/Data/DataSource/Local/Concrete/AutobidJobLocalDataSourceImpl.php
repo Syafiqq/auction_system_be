@@ -76,12 +76,11 @@ class AutobidJobLocalDataSourceImpl implements AutobidJobLocalDataSource
     #[Override]
     public function countProcessedSession(int $sessionId): array
     {
-        $processed = AutobidJob::where('session_id', $sessionId)
-            ->pluck('processed')
-            ->toArray();
+        $jobs = AutobidJob::query()->where('session_id', $sessionId)->get();
+
         return [
-            'processed' => count(array_filter($processed, fn($value) => $value === true)),
-            'unprocessed' => count(array_filter($processed, fn($value) => $value !== true)),
+            'processed' => $jobs->where('processed', true)->count(),
+            'unprocessed' => $jobs->where('processed', '!=', true)->count()
         ];
     }
 }

@@ -6,9 +6,11 @@
     "license": "MIT",
     "require": {
         "php": "8.3.*",
+        "ext-intl": "*",
         "laravel/framework": "11.18.1",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "2.9.0"
+        "laravel/tinker": "2.9.0",
+        "pusher/pusher-php-server": "^7.2"
     },
     "require-dev": {
         "fakerphp/faker": "1.23.1",

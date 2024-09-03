@@ -36,12 +36,66 @@ class BidLocalDataSourceImpl implements BidLocalDataSource
      * @inheritDoc
      */
     #[Override]
+    public function find(int $id): Bid
+    {
+        return Bid::query()->findOrFail($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findLastTwoBid(int $id): Collection
+    {
+        $bid = Bid::query()->where('id', $id)->first();
+        if ($bid == null) {
+            return collect([]);
+        }
+
+        $before = Bid::query()
+            ->where('auction_item_id', $bid->auction_item_id)
+            ->where('bid_at', '<', $bid->bid_at)
+            ->orderByDesc('bid_at')
+            ->first();
+        if ($before == null) {
+            return collect([$bid]);
+        } else {
+            return collect([$bid, $before]);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findWithUser(int $id): Bid
+    {
+        return Bid::with('user')->findOrFail($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
     public function findNewest(int $at): Bid
     {
         return Bid::where('auction_item_id', $at)
             ->orderByDesc('amount')
             ->orderByDesc('bid_at')
             ->firstOrFail();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findLatestBid(int $userId, int $auctionId): ?Bid
+    {
+        return Bid::query()
+            ->where('auction_item_id', $auctionId)
+            ->where('user_id', $userId)
+            ->orderByDesc('id')
+            ->first();
     }
 
     #[Override]
@@ -70,5 +124,26 @@ class BidLocalDataSourceImpl implements BidLocalDataSource
         }
 
         return $sum;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function findUsersOfBidAuction(
+        int $bidId,
+    ): Collection
+    {
+        $bid = Bid::query()->findOrFail($bidId);
+
+        $userIds = Bid::query()
+            ->where('auction_item_id', $bid->auction_item_id)
+            ->pluck('user_id', 'user_id')
+            ->toArray();
+        $userIds = array_keys($userIds);
+
+        return User::query()
+            ->whereIn('id', $userIds)
+            ->get();
     }
 }

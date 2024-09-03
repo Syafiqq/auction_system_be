@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Override;
@@ -30,6 +31,8 @@ use Override;
  * @property-read Bid|null $current_price
  * @property-read Bid|null $winner
  * @property-read UserAuctionAutobid|null $autobid
+ * @property-read Bill|null $bill
+ * @property-read User|null $winnerUser
  * @method static paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
  * @mixin Eloquent
  */
@@ -99,6 +102,23 @@ class AuctionItem extends Model
         return $this->hasMany(Bid::class);
     }
 
+    public function bill(): HasOne
+    {
+        return $this->hasOne(Bill::class);
+    }
+
+    public function winnerUser(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Bid::class,
+            'id',
+            'id',
+            'winner_id',
+            'user_id'
+        );
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -110,5 +130,10 @@ class AuctionItem extends Model
         return [
             'end_time' => 'datetime',
         ];
+    }
+
+    public function idPadded(): string
+    {
+        return str_pad((string)$this->id, 10, '0', STR_PAD_LEFT);
     }
 }

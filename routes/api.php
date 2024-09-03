@@ -21,6 +21,10 @@ Route::prefix('profile')
     ->group(function () {
         Route::get('', [UserController::class, 'index'])
             ->name('api.profile.index');
+        Route::get('auctions', [UserController::class, 'auctions'])
+            ->name('api.profile.auctions');
+        Route::get('winner', [UserController::class, 'winner'])
+            ->name('api.profile.winner');
         Route::patch('autobid', [UserController::class, 'updateAutobid'])
             ->name('api.profile.autobid');
     });
@@ -44,6 +48,14 @@ Route::prefix('auction')
 
         Route::patch('{id}/autobid', [AuctionItemController::class, 'autobidUpdate'])
             ->name('api.auction.autobid.update');
+
+        Route::get('{id}/bill', [AuctionItemController::class, 'bill'])
+            ->name('api.auction.bill');
+        Route::post('{id}/bill', [AuctionItemController::class, 'pay'])
+            ->name('api.auction.pay');
+
+        Route::get('{id}/participants', [AuctionItemController::class, 'participants'])
+            ->name('api.auction.participants');
     });
 
 Route::prefix('notification')

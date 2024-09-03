@@ -21,6 +21,7 @@ use Override;
  * @property int $id
  * @property string $username
  * @property string $password
+ * @property string $email
  * @property UserTypeEnum $type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -32,6 +33,8 @@ use Override;
  * @property-read int|null $bids_count
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property-read Collection<int, Bill> $bills
+ * @property-read int|null $bills_count
  * @property-read UserAuctionAutobid|null $autobid
  * @mixin Eloquent
  */
@@ -86,6 +89,11 @@ class User extends Model implements Authenticatable
             'id',
             'auction_item_id'
         );
+    }
+
+    public function bills(): HasMany
+    {
+        return $this->hasMany(Bill::class);
     }
 
     /**

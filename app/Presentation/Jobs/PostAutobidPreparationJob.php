@@ -38,7 +38,7 @@ class PostAutobidPreparationJob implements ShouldQueue
     ): void
     {
         $processed = $autobidJobRepository->countProcessedSessionFromLocal($this->sessionId);
-        if (($processed['processed'] + $processed['unprocessed']) <= 1) {
+        if (($processed['processed'] == 0)) {
             return;
         }
 
@@ -61,6 +61,10 @@ class PostAutobidPreparationJob implements ShouldQueue
             ]),
             $userIds
         );
+
+        if (empty($autobidJobs)) {
+            return;
+        }
 
         $autobidJobIds = $autobidJobRepository->massInsertToLocal($autobidJobs);
 
