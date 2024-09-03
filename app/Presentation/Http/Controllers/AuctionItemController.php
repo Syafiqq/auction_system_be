@@ -14,12 +14,14 @@ use App\Presentation\Http\Requests\AuctionItemCreateRequest;
 use App\Presentation\Http\Requests\AuctionItemDeleteRequest;
 use App\Presentation\Http\Requests\AuctionItemDetailRequest;
 use App\Presentation\Http\Requests\AuctionItemListRequest;
+use App\Presentation\Http\Requests\AuctionItemParticipantRequest;
 use App\Presentation\Http\Requests\AuctionItemPayBillRequest;
 use App\Presentation\Http\Requests\AuctionItemUpdateRequest;
 use App\Presentation\Http\Requests\AuctionUpdateAutobidRequest;
 use App\Presentation\Http\Resources\AbstractPaginatorResourceCollection;
 use App\Presentation\Http\Resources\AuctionItemBillResource;
 use App\Presentation\Http\Resources\AuctionItemResource;
+use App\Presentation\Http\Resources\BidWithUserResource;
 use App\Presentation\Http\Resources\BillResource;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -172,6 +174,22 @@ class AuctionItemController
             return BillResource::new($response)->toResponse($request);
         } catch (ModelNotFoundException) {
             return response()->json(null, Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (Exception) {
+            return response()->json(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function participants(AuctionItemParticipantRequest $request)
+    {
+        try {
+            $response = $this->auctionItemRepository->findParticipantsPaginatedFromLocal(
+                $request->id,
+                $request->page ?? 1,
+                10,
+            );
+            return AbstractPaginatorResourceCollection::new($response)
+                ->withMorph(fn($collection) => BidWithUserResource::collection($collection))
+                ->toResponse($request);
         } catch (Exception) {
             return response()->json(null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
